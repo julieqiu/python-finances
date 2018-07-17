@@ -20,7 +20,7 @@ def upgrade():
     op.create_table(
         'accounts',
         sa.Column('id', sa.Integer, primary_key=True),
-        sa.Column('name', sa.Date(), nullable=False),
+        sa.Column('name', sa.String(), nullable=False, unique=True),
         sa.Column('type', sa.String(), nullable=False),
         sa.Column('balance', sa.Numeric()),
     )
@@ -28,11 +28,11 @@ def upgrade():
     op.create_table(
         'transactions',
         sa.Column('id', sa.Integer, primary_key=True),
+        sa.Column('account_id', sa.Integer(), nullable=True),
         sa.Column('date', sa.Date(), nullable=False),
-        sa.Column('type', sa.String(), nullable=False),
         sa.Column('description', sa.String(), nullable=False),
         sa.Column('amount', sa.Numeric(), nullable=False),
-        sa.Column('account_id', sa.Integer(), nullable=False),
+        sa.Column('type', sa.String(), nullable=True),
         sa.ForeignKeyConstraint(['account_id'], ['accounts.id'], ),
     )
 

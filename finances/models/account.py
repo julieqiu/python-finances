@@ -1,5 +1,5 @@
 from sqlalchemy import Integer, Column, String, Boolean, ForeignKey, Numeric
-from recipes.models.base import Base
+from finances.models.base import Base
 
 
 class Account(Base):
