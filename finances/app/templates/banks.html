@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {% for bank in banks %}
+    <div>
+      <div class="bank">
+        <div>
+          <h2 class="bank-name">{{ bank.name }}</h2>
+          <div class="bank-account">
+            <p class="bank-info">Account Number</p>
+            <p class="bank-info">{{ bank.account }}</p>
+          </div>
+          <div class="bank-routing">
+            <p class="bank-info">Routing Number</p>
+            <p class="bank-info">{{ bank.routing }}</p>
+          </div>
+        <div>
+      </div>
+    </div>
+  {% endfor %}
+{% endblock %}

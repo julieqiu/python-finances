@@ -1,4 +1,4 @@
-from recipes.web.app.app import app
+from finances.app.app import app
 
 
 def main():
