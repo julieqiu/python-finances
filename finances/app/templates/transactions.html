@@ -1,21 +1,37 @@
 {% extends "base.html" %}
 
 {% block content %}
-  {% for bank in banks %}
-    <div>
-      <div class="bank">
-        <div>
-          <h2 class="bank-name">{{ bank.name }}</h2>
-          <div class="bank-account">
-            <p class="bank-info">Account Number</p>
-            <p class="bank-info">{{ bank.account }}</p>
-          </div>
-          <div class="bank-routing">
-            <p class="bank-info">Routing Number</p>
-            <p class="bank-info">{{ bank.routing }}</p>
-          </div>
-        <div>
-      </div>
-    </div>
-  {% endfor %}
+<style>
+td {
+  padding: 5px;
+  font-family: helvetica;
+  font-size: 14px;
+}
+
+.header {
+  background: cornflowerblue;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+</style>
+
+  <table>
+    <tr>
+      <td class="header">Date</td>
+      <td class="header">Description</td>
+      <td class="header">Amount</td>
+      <td class="header">Type</td>
+    <tr>
+    {% for transaction in transactions %}
+    <tr>
+      <td>{{ transaction.date }}</td>
+      <td>{{ transaction.description }}</td>
+      <td>${{ transaction.amount }}</td>
+      <td>{{ transaction.type }}</td>
+    </tr>
+    {% endfor %}
+  </table>
 {% endblock %}

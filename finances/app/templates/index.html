@@ -1,12 +1,142 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div>
-    <div>
-      <a href="{{url_for("banks")}}">Banks</a>
-    </div>
-    <div  >
-      <a href="{{url_for("transactions")}}">Transations</a>
-    </div>
+<style>
+.green {
+  color: darkgreen;
+}
+
+.red {
+  color: red;
+}
+
+.gray {
+  color: gray;
+}
+
+.font-size-16 {
+  font-size: 16px;
+}
+
+.font-size-20 {
+  font-size: 20px;
+}
+
+.font-size-24 {
+  font-size: 24px;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+table {
+  font-size: 18px;
+}
+
+td {
+  padding-right: 10px;
+}
+
+form {
+  font-size: 18px;
+}
+
+.card {
+  width: 45%;
+  min-height: 200px;
+  background: lavender;
+  display: inline-block;
+  vertical-align: top;
+  margin: 10px;
+  padding: 10px;
+}
+
+</style>
+<div class="card overview">
+  <h2>Overview</h2>
+  <table>
+    <tr>
+      <td>Cash</td>
+      <td class="value green">$86,124.17</td>
+    </tr>
+    <tr>
+      <td>Credit Debt</td>
+      <td class="value gray">$4,895.157</td>
+    </tr>
+    <tr>
+      <td>Investments</td>
+      <td class="value green">$127,445.59</td>
+    </tr>
+  </table>
+  </br>
+  <div class="font-size-20">
+    You spent <span class="gray">$0</span> in the last few days.
   </div>
+</div>
+
+
+<div class="card transactions">
+  <table>
+    <h2>Transactions</h2>
+    <tr>
+      <td>Lyft</td>
+      <td>$9.01</td>
+    </tr>
+    <tr>
+      <td>Lyft</td>
+      <td>$6.85</td>
+    </div>
+    <tr>
+      <td>MTA</td>
+      <td>$25.50</td>
+    </tr>
+  </table>
+</div>
+
+<div class="card breakdown">
+  <h2>
+    <span>Monthly Income: </span>
+    <span class="green">$5,266.00</span>
+  </h2>
+  <table>
+    <tr>
+      <td>Spent:</td>
+      <td>$2,527.26</td>
+    </tr>
+    <tr>
+      <td>Saved:</td>
+      <td>$2,527.26</td>
+    </tr>
+  </table>
+</div>
+
+<div class="card breakdown">
+  <h2>August Spending</h2>
+  <table>
+    <tr>
+      <td>Lyft</td>
+      <td>$45.12</td>
+    </tr>
+    <tr>
+      <td>Food</td>
+      <td>$156.76</td>
+    </tr>
+  </table>
+</div>
+
+<div class="card category">
+  <h2>What Did I Spend On: </h2>
+  <form>
+    <input placeholder="Lyft"></input>
+    <input placeholder="This Month"></input>
+    <div>
+      <div>Total Spent</div>
+      <div>$45.12</div>
+    </div>
+    <button>Let's See</button>
+  </form>
+</div>
+
+
 {% endblock %}
