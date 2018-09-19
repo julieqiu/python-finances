@@ -58,20 +58,20 @@ form {
   <table>
     <tr>
       <td>Cash</td>
-      <td class="value green">$86,124.17</td>
+      <td class="value green">${{ cash }}</td>
     </tr>
     <tr>
       <td>Credit Debt</td>
-      <td class="value gray">$4,895.157</td>
+      <td class="value gray">${{ credit }}</td>
     </tr>
     <tr>
       <td>Investments</td>
-      <td class="value green">$127,445.59</td>
+      <td class="value green">${{ investments }}</td>
     </tr>
   </table>
   </br>
   <div class="font-size-20">
-    You spent <span class="gray">$0</span> in the last few days.
+    You spent <span class="gray">${{ spent_in_last_10_days }}</span> in the last few days.
   </div>
 </div>
 
@@ -97,16 +97,16 @@ form {
 <div class="card breakdown">
   <h2>
     <span>Monthly Income: </span>
-    <span class="green">$5,266.00</span>
+    <span class="green">${{ monthly_income }}</span>
   </h2>
   <table>
     <tr>
       <td>Spent:</td>
-      <td>$2,527.26</td>
+      <td>${{ monthly_spent }}</td>
     </tr>
     <tr>
       <td>Saved:</td>
-      <td>$2,527.26</td>
+      <td>${{ monthly_saved }}</td>
     </tr>
   </table>
 </div>
