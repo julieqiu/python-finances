@@ -1,110 +1,51 @@
-PHRASES_COFFEE = [
-    'Coffee',
-    'CAFFE BENE',
-    'MAISON KAYSER',
-    'THE BEAN',
-    'TIM HO WAN',
-    'AUNTIE ANNE',
-    'ROSE BASIL',
-    'GONG CHA',
-    'JUICE',
-    'COCO NEW YORK NY',
-]
+def generate_category_to_phrases() -> dict:
+    def phrases_list(filename: str) -> list:
+        with open('/Users/julie/Code/finances/finances/app/classify/filters/' + filename, 'r') as f:
+            words = f.readlines()
+            return [word[:-1] for word in words]
 
-PHRASES_FOOD = [
-    'TABOONETTE',
-    'PIG AND KHAO',
-    'BURGER',
-    'DELI',
-    'ALMOND',
-    'BAGEL',
-    'BURRITO',
-    'CAFE',
-    'CAVA',
-    'DESI GALLI',
-    'DUMPLING',
-    'FOOD',
-    'IZAKAYA',
-    'LITTLE BEET',
-    'MCDONALD',
-    'MIZU',
-    'PIZZA',
-    'PIZZERIA',
-    'PRET A MANGER',
-    'RESTAURANT',
-    'SOUTH OF THE CLOUDS',
-    'SQ *',
-    'SUSHI',
-    'SWEETGREEN',
-    'SARABETHS',
-    'CHIPOTLE',
-    'PETITE ABEILLE',
-    'NOODLE',
-    'UPLAND',
-    'HIGHLAND FRIED',
-    'VAMOS',
-    'YELP',
-    'DIAN KITCHEN',
-    'SNOWFOX',
-]
+    PHRASES_ALCOHOL = phrases_list('alcohol.txt')
+    PHRASES_COFFEE = phrases_list('coffee.txt')
+    PHRASES_ENTERTAINMENT = phrases_list('entertainment.txt')
+    PHRASES_FOOD = phrases_list('food.txt')
+    PHRASES_SKIPPED = phrases_list('skipped.txt')
+    PHRASES_TRAVEL = phrases_list('travel.txt')
 
-PHRASES_SKIPPED = [
-    'CHASE CREDIT CRD',
-    'CHASE DES:EPAY',
-    'Online Banking transfer',
-    'Online Transfer',
-    'Payment to Chase card',
-    'SCHWAB BROKERAGE DES',
-    'Gap Visa DES',
-    'interest',
-    'thank',
-]
+    return {
+        'aws': ['AWS'],
+        'alcohol': PHRASES_ALCOHOL,
+        'amazon': ['Amazon'],
+        'atm': ['ATM WITHDRAW', 'ATM DEBIT'],
+        'audible': ['Audible'],
+        'checks': ['REMOTE ONLINE DEPOSIT', 'ATM CHECK DEPOSIT', 'DEPOSIT *MOBILE NY'],
+        'coffee': PHRASES_COFFEE,
+        'customer_withdrawal': ['Customer Withdrawal Image'],
+        'entertainment': PHRASES_ENTERTAINMENT,
+        'equinox': ['EQUINOX'],
+        'food': PHRASES_FOOD,
+        'grocery': ['TRADER JOE', 'WHOLEFDS'],
+        'income': ['SPRING NYC', 'SHOPSPRING', 'JELLO LABS DES:DIR DEP ID'],
+        'bonus': ['$150 for New Savings', '$200 for New Checking'],
+        'laundry': ['LAUNDRY LAND'],
+        'lyft': ['Lyft', 'Uber'],
+        'mta': ['MTA'],
+        'beauty': ['NAILS', 'DREAM BLUE BEAUTY', 'SPA'],
+        'paypal': ['PAYPAL'],
+        'physical_therapy': ['RECOVERY PHYSICAL THERAPY'],
+        'reimbursed': ['Expensify', 'ELASTICSEARCH JAN3'],
+        'rent': ['STUYVESANT TOWN'],
+        'skipped': PHRASES_SKIPPED,
+        'stitch_fix': ['STITCH FIX'],
+        'taxi': ['NYCTAXI', 'TAXI SVC'],
+        'travel':PHRASES_TRAVEL,
+        'venmo': ['Venmo', 'Zelle'],
+        'weight_watchers': ['WEIGHTWATCHERS'],
+        'walgreens_cvs': ['WALGREENS', 'CVS'],
+        'shopping': ['BOOK', 'BEST BUY'],
+        'interview_prep': ['INTERVIEWCAKE'],
+        'repairs': ['MAX SHOE REPAIR'],
+        'health': ['MOUNT SINAI'],
+        'wedding': ['ZOLA'],
+    }
 
-PHRASES_TRAVEL = [
-    'HOTEL',
-    'Megabus',
-    'METRO-NORTH',
-    'TRIPADVISOR',
-    'Travel',
-    'VIATOR',
-    'HEATHROWEXPRESS',
-    'TICKET MACHINE',
-
-]
-
-PHRASES_ALCOHOL = [
-    'FIVE HORSES TAVERN',
-    'MONA',
-    'Mace',
-    'CLINTON HALL',
-]
-
-CATEGORY_TO_PHRASES = {
-    'alcohol': PHRASES_ALCOHOL,
-    'amazon': ['Amazon'],
-    'atm': ['ATM WITHDRAW'],
-    'audible': ['Audible'],
-    'checks': ['REMOTE ONLINE DEPOSIT', 'ATM CHECK DEPOSIT', 'DEPOSIT *MOBILE NY'],
-    'coffee': PHRASES_COFFEE,
-    'customer_withdrawal': ['Customer Withdrawal Image'],
-    'equinox': ['EQUINOX'],
-    'food': PHRASES_FOOD,
-    'grocery': ['TRADER JOE', 'WHOLEFDS'],
-    'income': ['SPRING NYC', 'SHOPSPRING', 'JELLO LABS DES:DIR DEP ID'],
-    'bonus': ['$150 for New Savings', '$200 for New Checking'],
-    'laundry': ['LAUNDRY LAND'],
-    'lyft': ['Lyft', 'Uber'],
-    'mta': ['MTA'],
-    'nails': ['NAILS', 'DREAM BLUE BEAUTY'],
-    'paypal': ['PAYPAL'],
-    'physical_therapy': ['RECOVERY PHYSICAL THERAPY'],
-    'reimbursed': ['Expensify', 'ELASTICSEARCH JAN3'],
-    'rent': ['STUYVESANT TOWN'],
-    'skipped': PHRASES_SKIPPED,
-    'stitch_fix': ['STITCH FIX'],
-    'taxi': ['NYCTAXI', 'TAXI SVC'],
-    'travel':PHRASES_TRAVEL,
-    'venmo': ['Venmo'],
-    'weight_watchers': ['WEIGHTWATCHERS'],
-    'walgreens_cvs': ['WALGREENS', 'CVS'],
-}
+CATEGORY_TO_PHRASES = generate_category_to_phrases()
