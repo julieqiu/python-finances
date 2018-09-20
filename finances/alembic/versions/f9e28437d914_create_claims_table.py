@@ -18,21 +18,24 @@ depends_on = None
 
 def upgrade():
     op.create_table(
-        'claims',
+        'insurance_claims',
         sa.Column('id', sa.Integer, primary_key=True),
+        sa.Column('service_date', sa.Date(), nullable=False),
+        sa.Column('type', sa.String(), nullable=True),
         sa.Column('claim_id', sa.String(), nullable=True),
-        sa.Column('date', sa.Date(), nullable=False),
-        sa.Column('provided_by', sa.String(), nullable=False),
-        sa.Column('billed', sa.Numeric(), nullable=True),
-        sa.Column('allowed_amount', sa.Numeric(), nullable=True),
-        sa.Column('paid', sa.Numeric(), nullable=True),
-        sa.Column('deductible', sa.Numeric(), nullable=True),
-        sa.Column('coinsurance', sa.Numeric(), nullable=True),
-        sa.Column('not_covered', sa.Numeric(), nullable=True),
-        sa.Column('your_cost', sa.Numeric(), nullable=True),
+        sa.Column('patient', sa.String(), nullable=True),
+        sa.Column('provider', sa.String(), nullable=False),
+        sa.Column('billed', sa.Numeric(), nullable=True, default=0),
+        sa.Column('allowed_amount', sa.Numeric(), nullable=True, default=0),
+        sa.Column('paid', sa.Numeric(), nullable=True, default=0),
+        sa.Column('deductible', sa.Numeric(), nullable=True, default=0),
+        sa.Column('coinsurance', sa.Numeric(), nullable=True, default=0),
+        sa.Column('not_covered', sa.Numeric(), nullable=True, default=0),
+        sa.Column('personal_cost', sa.Numeric(), nullable=True, default=0),
         sa.Column('status', sa.Numeric(), nullable=False),
-        sa.ForeignKeyConstraint(['account_id'], ['accounts.id'], nullable=True),
+        sa.Column('account_id', sa.Integer(), nullable=True),
+        sa.ForeignKeyConstraint(['account_id'], ['accounts.id'], ),
     )
 
 def downgrade():
-    op.drop_table('claims')
+    op.drop_table('insurance_claims')
