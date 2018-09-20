@@ -22,16 +22,8 @@ INT_TO_MONTH = {
 }
 
 
-def monthly_reports(year=2018):
-    with db_session() as session:
-        db_transactions = session.query(DbTransaction).all()
-        transactions = [
-            db_transaction_to_domain_transaction(t)
-            for t in db_transactions
-        ]
-
-    monthly_reports = {}
-    for month in range(1, 13):
+def monthly_reports(year=2018, only_month=None):
+    def report_for_month(month: int) -> Report:
         start_date = datetime.date(year, month, 1)
         if month != 12:
             end_date = datetime.date(year, month + 1, 1) - datetime.timedelta(days=1)
@@ -43,7 +35,19 @@ def monthly_reports(year=2018):
             end_date=end_date,
             transactions=transactions,
         )
+        return report.to_dict()
 
-        monthly_reports[INT_TO_MONTH[month]] = report.to_dict()
+    with db_session() as session:
+        db_transactions = session.query(DbTransaction).all()
+        transactions = [
+            db_transaction_to_domain_transaction(t)
+            for t in db_transactions
+        ]
 
+    monthly_reports = {}
+    if only_month:
+        monthly_reports[INT_TO_MONTH[only_month]] = report_for_month(only_month)
+    else:
+        for month in range(1, 13):
+            monthly_reports[INT_TO_MONTH[month]] = report_for_month(month)
     return monthly_reports

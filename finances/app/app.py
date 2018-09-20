@@ -9,35 +9,26 @@ from finances.app.controllers.monthly import monthly_reports
 app = Flask(__name__)
 
 
-CATEGORIES = [
-    {
-        'name': 'Lyft / Uber / Taxi / Via',
-        'search_terms': ['lyft', 'uber', 'taxi'],
-    },
-    {
-        'name': 'Paychecks',
-        'search_terms': ['DIR DEP'],
-    },
-    {
-        'name': 'Equinox',
-        'search_terms': ['Equinox'],
-    },
-    {
-        'name': 'Flights',
-        'search_terms': ['JetBlue', 'Delta', 'United', 'Norwegian', 'Frontier'],
-    },
-]
-
-def transactions_for_term(term: str):
-    with db_session() as session:
-        return session.query(DbTransaction).filter(
-            DbTransaction.description.ilike('%{}%'.format(term))
-        )
-
-
 @app.route('/')
 @app.route('/index')
 def index():
+    now = datetime.datetime.now()
+    return render_template(
+        'monthly.html',
+        monthly_reports=monthly_reports(only_month=now.month)
+    )
+
+
+@app.route('/')
+@app.route('/monthly')
+def monthly():
+    return render_template(
+        'monthly.html',
+        monthly_reports=monthly_reports()
+    )
+
+@app.route('/tmp')
+def tmp():
     with db_session() as session:
         # TODO: Generate numbers
         cash = 86124.17
@@ -48,7 +39,7 @@ def index():
         monthly_spent = 2527.26
         monthly_saved = 2527.26
 
-        for category in CATEGORIES:
+        for category in {}:
             transactions = set()
             for term in category['search_terms']:
                 transactions.update(transactions_for_term(term))
@@ -71,6 +62,12 @@ def index():
         monthly_saved=monthly_saved,
         # categories=[category for category in CATEGORIES if len(category['transactions']) > 0],
     )
+
+def transactions_for_term(term: str):
+    with db_session() as session:
+        return session.query(DbTransaction).filter(
+            DbTransaction.description.ilike('%{}%'.format(term))
+        )
 
 
 @app.route('/banks')
@@ -96,12 +93,6 @@ def banks():
 
 
 
-@app.route('/monthly')
-def monthly():
-    return render_template(
-        'monthly.html',
-        monthly_reports=monthly_reports()
-    )
 
 
 @app.route('/transactions')
@@ -112,25 +103,4 @@ def transactions():
     return render_template(
         'transactions.html',
         transactions=transactions
-    )
-
-
-@app.route('/transactions/<string:term>')
-def transactions_by_term(term: str):
-    for category in CATEGORIES:
-        if term != category['name']:
-            continue
-
-        transactions = set()
-        for term in category['search_terms']:
-            transactions.update(transactions_for_term(term))
-            return render_template(
-                'transactions.html',
-                transactions=list(transactions),
-            )
-
-    transactions = transactions_for_term(term)
-    return render_template(
-        'transactions.html',
-        transactions=list(transactions),
     )
