@@ -4,8 +4,7 @@ from flask import Flask, render_template
 
 from finances.database import db_session
 from finances.database.models import DbTransaction
-from finances.app.classify.constants import CATEGORY_TO_PHRASES
-from finances.app.controllers import monthly_api
+from finances.app.controllers.monthly import monthly_reports
 
 app = Flask(__name__)
 
@@ -101,7 +100,7 @@ def banks():
 def monthly():
     return render_template(
         'monthly.html',
-        monthly=monthly_api.monthly_info_info(),
+        monthly_reports=monthly_reports()
     )
 
 

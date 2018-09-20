@@ -1,7 +1,7 @@
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, String, Date, Text, ARRAY, Integer, ForeignKey, Numeric
 
-from finances.models.base import Base
+from finances.database.models.base import Base
 
 
 class DbTransaction(Base):

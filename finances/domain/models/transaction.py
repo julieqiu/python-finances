@@ -13,14 +13,15 @@ class Transaction:
         self.amount = amount
         self.account = account
 
-    def _classification_for_transaction(self):
+    @property
+    def _classification(self):
         for l1, l1_dict in CLASSIFICATION_TO_PHRASES.items():
             for l2, l2_dict in l1_dict.items():
                 for l3, phrases in l2_dict.items():
                     for phrase in phrases:
-                        if phrase in self.description:
+                        if phrase.lower() in self.description.lower():
                             return (l1, l2, l3)
-        return (None, None, None)
+        return ('EXPENSES', 'Other', 'Other')
 
     @property
     def month(self):
@@ -32,12 +33,12 @@ class Transaction:
 
     @property
     def l1(self):
-        return self._classification_for_transaction[0]
+        return self._classification[0]
 
     @property
     def l2(self):
-        return self._classification_for_transaction[1]
+        return self._classification[1]
 
     @property
     def l3(self):
-        return self._classification_for_transaction[2]
+        return self._classification[2]

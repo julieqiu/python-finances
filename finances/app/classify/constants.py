@@ -2,7 +2,10 @@
 def phrases_list(filename: str) -> list:
     with open('/Users/julie/Code/finances/finances/app/classify/filters/' + filename, 'r') as f:
         words = f.readlines()
-        return [word[:-1] for word in words]
+        return [
+            word[:-1] if word[-1] == '\n' else word
+            for word in words
+        ]
 
 # L1: List of items that are L2 for that L2
 #
@@ -31,7 +34,7 @@ CLASSIFICATION_TO_PHRASES = {
         'Health': {
             'health': ['MOUNT SINAI'],
             'physical_therapy': ['RECOVERY PHYSICAL THERAPY'],
-        }
+        },
 
         'Shopping': {
             'amazon': ['Amazon'],
@@ -54,22 +57,23 @@ CLASSIFICATION_TO_PHRASES = {
             'atm': ['ATM WITHDRAW', 'ATM DEBIT'],
             'customer_withdrawal': ['Customer Withdrawal Image'],
             'paypal': ['PAYPAL'],
-            'venmo': ['Venmo', 'Zelle'],
+            'venmo': ['VENMO', 'Zelle'],
         },
     },
 
     'SKIPPED': {
         'Skipped': {
-            'skipped': {'skipped': phrases_list('skipped.txt')},
+            'skipped': phrases_list('skipped.txt'),
         }
     },
 
     'INCOME': {
         'Income': {
-            'bonus': ['$150 for New Savings', '$200 for New Checking'],
+            'bonus': ['IRS TREAS', '$150 for New Savings', '$200 for New Checking'],
             'checks': ['REMOTE ONLINE DEPOSIT', 'ATM CHECK DEPOSIT', 'DEPOSIT *MOBILE NY'],
             'income': ['SPRING NYC', 'SHOPSPRING', 'JELLO LABS DES:DIR DEP ID'],
             'reimbursed': ['Expensify', 'ELASTICSEARCH JAN3'],
+            'interest': ['INTEREST'],
         },
     },
 
@@ -77,7 +81,10 @@ CLASSIFICATION_TO_PHRASES = {
         'Monthly': {
             'equinox': ['EQUINOX'],
             'laundry': ['LAUNDRY LAND'],
-            'rent': ['STUYVESANT TOWN'],
+            'rent': [
+                'STUYVESANT TOWN',
+                'NOVELPAY PROPRTYPAY',
+            ],
             'weight_watchers': ['WEIGHTWATCHERS'],
         },
     },

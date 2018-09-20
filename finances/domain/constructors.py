@@ -1,11 +1,11 @@
 from finances.database.models import DbTransaction
-from finances.domain.transaction import Transaction
+from finances.domain.models import Transaction
 
 
 def db_transaction_to_domain_transaction(db_transaction: DbTransaction):
     return Transaction(
-        db_transaction.date = date,
-        db_transaction.description = description,
-        db_transaction.amount = amount,
-        db_transaction.account = account,
+        date=db_transaction.date,
+        description=db_transaction.description,
+        amount=db_transaction.amount,
+        account=db_transaction.account_id,
     )
