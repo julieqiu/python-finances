@@ -4,8 +4,8 @@ from os.path import isfile, join
 
 from sqlalchemy.dialects.postgresql import insert
 
-from finances.models import Transaction, Account
 from finances.database import db_session
+from finances.database.models import DbTransaction, DbAccount
 
 CSV_TO_TRANSACTION_COL = {
     'amount': 'amount',
@@ -47,7 +47,7 @@ def csv_to_transactions(filename: str):
 
             with db_session() as session:
                 session.execute(
-                    insert(Transaction).values(transaction_values)
+                    insert(DbTransaction).values(transaction_values)
                 )
 
 

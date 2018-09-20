@@ -2,7 +2,7 @@ from sqlalchemy import Integer, Column, String, Boolean, ForeignKey, Numeric
 from finances.models.base import Base
 
 
-class Account(Base):
+class DbAccount(Base):
 
     __tablename__ = 'accounts'
 

@@ -4,7 +4,7 @@ from sqlalchemy import Column, String, Date, Text, ARRAY, Integer, ForeignKey, N
 from finances.models.base import Base
 
 
-class Transaction(Base):
+class DbTransaction(Base):
 
     __tablename__ = 'transactions'
 
@@ -14,3 +14,4 @@ class Transaction(Base):
     description = Column(String, nullable=False)
     amount = Column(Numeric)
     account_id = Column(ForeignKey('accounts.id'), nullable=False)
+

@@ -3,7 +3,7 @@ import datetime
 from flask import Flask, render_template
 
 from finances.database import db_session
-from finances.models import Transaction
+from finances.database.models import DbTransaction
 from finances.app.classify.constants import CATEGORY_TO_PHRASES
 from finances.app.controllers import monthly_api
 
@@ -31,8 +31,8 @@ CATEGORIES = [
 
 def transactions_for_term(term: str):
     with db_session() as session:
-        return session.query(Transaction).filter(
-            Transaction.description.ilike('%{}%'.format(term))
+        return session.query(DbTransaction).filter(
+            DbTransaction.description.ilike('%{}%'.format(term))
         )
 
 
@@ -108,7 +108,7 @@ def monthly():
 @app.route('/transactions')
 def transactions():
     with db_session() as session:
-        transactions = session.query(Transaction).all()
+        transactions = session.query(DbTransaction).all()
 
     return render_template(
         'transactions.html',
