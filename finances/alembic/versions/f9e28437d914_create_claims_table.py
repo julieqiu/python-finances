@@ -30,9 +30,10 @@ def upgrade():
         sa.Column('paid', sa.Numeric(), nullable=True, default=0),
         sa.Column('deductible', sa.Numeric(), nullable=True, default=0),
         sa.Column('coinsurance', sa.Numeric(), nullable=True, default=0),
+        sa.Column('copay', sa.Numeric(), nullable=True, default=0),
         sa.Column('not_covered', sa.Numeric(), nullable=True, default=0),
         sa.Column('personal_cost', sa.Numeric(), nullable=True, default=0),
-        sa.Column('status', sa.Numeric(), nullable=False),
+        sa.Column('status', sa.String(), nullable=False),
         sa.Column('account_id', sa.Integer(), nullable=True),
         sa.ForeignKeyConstraint(['account_id'], ['accounts.id'], ),
     )
