@@ -30,12 +30,11 @@ def monthly_reports(year=2018, only_month=None):
         else:
             end_date= datetime.date(year, month, 31)
 
-        report = Report(
+        return Report(
             start_date=start_date,
             end_date=end_date,
             transactions=transactions,
-        )
-        return report.to_dict()
+        ).to_dict()
 
     with db_session() as session:
         db_transactions = session.query(DbTransaction).all()
@@ -48,6 +47,7 @@ def monthly_reports(year=2018, only_month=None):
     if only_month:
         monthly_reports[INT_TO_MONTH[only_month]] = report_for_month(only_month)
     else:
-        for month in range(1, 13):
-            monthly_reports[INT_TO_MONTH[month]] = report_for_month(month)
+        for month in range(12, 0, -1):
+            if report_for_month(month):
+                monthly_reports[INT_TO_MONTH[month]] = report_for_month(month)
     return monthly_reports

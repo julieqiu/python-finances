@@ -7,7 +7,18 @@ from os.path import isfile, join
 from sqlalchemy.dialects.postgresql import insert
 
 from finances.database import db_session
+from finances.database.db_errors import UniqueViolation, split_integrity_error
+
 from finances.app.ingest.constants import CSV_INGEST_INFO
+
+COUNT = 1
+
+INCREMENT_TRANSACTIONS = [
+    (None, 'REMOTE ONLINE DEPOSIT # 1', '210.00'),
+    ('08/13/2018', 'REMOTE ONLINE DEPOSIT # 1', '255.00'),
+    ('6/27/18', 'PRET A MANGER', '-2.65'),
+    ('9/7/18', "SQ *PJ'S COFFEE OF NEW OR", '-2.96'),
+]
 
 
 def csv_to_transactions(filename: str,
@@ -38,6 +49,7 @@ def csv_to_transactions(filename: str,
                 except Exception:
                     import pdb; pdb.set_trace()
             transaction_values[db_col] = db_val
+
         return transaction_values
 
 
@@ -61,6 +73,33 @@ def csv_to_transactions(filename: str,
                     )
         return True
 
+    def write_to_db(transaction_values: dict) -> None:
+        for date, description, amount in INCREMENT_TRANSACTIONS:
+            if (transaction_values['description'] == description and
+                transaction_values['amount'] == amount and
+                (date is None or transaction_values['date'] == date)):
+
+                global COUNT
+                transaction_values['description'] = ('{} [{}]'.format(description, COUNT))
+                COUNT += 1
+
+        try:
+            with db_session() as session, split_integrity_error() as err:
+                session.execute(
+                    insert(db_model).values(transaction_values)
+                )
+        except UniqueViolation as err:
+            import pdb; pdb.set_trace()
+            print(err)
+            print(transaction_values)
+            print('hi')
+            raise err
+        except Exception as e:
+            print(err)
+            print(transaction_values)
+            raise e
+
+
     with open(filename, 'r') as csvfile:
         reader = csv.DictReader(csvfile)
         for csv_row in reader:
@@ -72,15 +111,7 @@ def csv_to_transactions(filename: str,
                 optional_cols):
                 continue
 
-            with db_session() as session:
-                try:
-                    session.execute(
-                        insert(db_model).values(transaction_values)
-                    )
-                except Exception as err:
-                    print(err)
-                    print(transaction_values)
-                    raise Exception
+            write_to_db(transaction_values)
 
 
 

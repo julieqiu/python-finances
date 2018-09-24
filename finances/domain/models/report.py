@@ -33,6 +33,9 @@ class Report:
         if len(self.categorized_transactions.keys()) > 4:
             raise Exception('Unexpected keys in report: {}'.format(self.categorized_transactions.keys()))
 
+        if not self.transactions:
+            return {}
+
         return {
             'total_earned': self.total_earned,
             'total_spent': self.total_spent,

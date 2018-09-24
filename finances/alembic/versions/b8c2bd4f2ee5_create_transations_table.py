@@ -36,6 +36,9 @@ def upgrade():
         sa.ForeignKeyConstraint(['account_id'], ['accounts.id'], ),
     )
 
+    op.create_unique_constraint(None, 'transactions', ['date', 'description', 'amount'])
+
+
 def downgrade():
     op.drop_table('transactions')
     op.drop_table('accounts')
