@@ -19,7 +19,8 @@ def csv_to_transactions(filename: str,
     def create_transaction_values(csv_row: dict):
         transaction_values = dict()
         for csv_col, csv_val in csv_row.items():
-            db_col = csv_col_to_db_col.get(csv_col.upper())
+            if csv_col:
+                db_col = csv_col_to_db_col.get(csv_col.upper())
 
             if not db_col:
                 continue
@@ -32,7 +33,10 @@ def csv_to_transactions(filename: str,
             elif csv_val == 'Does Not Apply':
                 db_val = None
             else:
-                db_val = ' '.join([s for s in csv_val.split(' ') if s])
+                try:
+                    db_val = ' '.join([s for s in csv_val.split(' ') if s])
+                except Exception:
+                    import pdb; pdb.set_trace()
             transaction_values[db_col] = db_val
         return transaction_values
 
@@ -41,7 +45,7 @@ def csv_to_transactions(filename: str,
                                     skip_if_missing: set,
                                     optional_cols: set) -> bool:
         for db_col, db_val in transaction_values.items():
-            if db_col in skip_if_missing and db_val is None:
+            if db_col in skip_if_missing and not db_val:
                 return False
 
             try:
@@ -100,7 +104,7 @@ if __name__ == '__main__':
 
     mypath = csv_ingest_info['CSV_DIRECTORY']
     for f in listdir(mypath):
-        if isfile(join(mypath, f)):
+        if isfile(join(mypath, f)) and f != '.DS_Store':
             print(
             """
 
