@@ -19,12 +19,18 @@ def index():
     )
 
 
-@app.route('/')
 @app.route('/monthly')
 def monthly():
     return render_template(
         'monthly.html',
         monthly_reports=monthly_reports()
+    )
+
+@app.route('/insurance')
+def insurance():
+    return render_template(
+        'insurance.html',
+        insurance_claims=insurance_claims()
     )
 
 @app.route('/tmp')
