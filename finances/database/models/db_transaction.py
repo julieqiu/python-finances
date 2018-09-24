@@ -1,5 +1,5 @@
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, String, Date, Text, ARRAY, Integer, ForeignKey, Numeric
+from sqlalchemy import Boolean, Column, String, Date, Text, ARRAY, Integer, ForeignKey, Numeric
 from sqlalchemy import (
     ForeignKey, UniqueConstraint
 )
@@ -18,6 +18,8 @@ class DbTransaction(Base):
     date = Column(Date, nullable=False)
     type = Column(String, nullable=False)
     description = Column(String, nullable=False)
-    amount = Column(Numeric)
+    amount = Column(Numeric, nullable=False)
+    reimbursable = Column(Boolean, nullable=True)
+    reimbursement = Column(Boolean, nullable=True)
     account_id = Column(ForeignKey('accounts.id'), nullable=True)
     trip_id = Column(ForeignKey('trips.id'), nullable=True)

@@ -42,6 +42,8 @@ def upgrade():
         sa.Column('description', sa.String(), nullable=False),
         sa.Column('amount', sa.Numeric(), nullable=False),
         sa.Column('type', sa.String(), nullable=True),
+        sa.Column('reimbursable', sa.Boolean(), nullable=True),
+        sa.Column('reimbursement', sa.Boolean(), nullable=True),
         sa.ForeignKeyConstraint(['account_id'], ['accounts.id'], ),
         sa.ForeignKeyConstraint(['trip_id'], ['trips.id'], ),
     )
@@ -52,3 +54,4 @@ def upgrade():
 def downgrade():
     op.drop_table('transactions')
     op.drop_table('accounts')
+    op.drop_table('trips')
