@@ -19,4 +19,5 @@ class DbTransaction(Base):
     type = Column(String, nullable=False)
     description = Column(String, nullable=False)
     amount = Column(Numeric)
-    account_id = Column(ForeignKey('accounts.id'), nullable=False)
+    account_id = Column(ForeignKey('accounts.id'), nullable=True)
+    trip_id = Column(ForeignKey('trips.id'), nullable=True)

@@ -26,14 +26,24 @@ def upgrade():
     )
 
     op.create_table(
+        'trips',
+        sa.Column('id', sa.Integer, primary_key=True),
+        sa.Column('name', sa.String(), nullable=False, unique=True),
+        sa.Column('start_date', sa.Date(), nullable=False),
+        sa.Column('end_date', sa.Date(), nullable=False),
+    )
+
+    op.create_table(
         'transactions',
         sa.Column('id', sa.Integer, primary_key=True),
         sa.Column('account_id', sa.Integer(), nullable=True),
+        sa.Column('trip_id', sa.Integer(), nullable=True),
         sa.Column('date', sa.Date(), nullable=False),
         sa.Column('description', sa.String(), nullable=False),
         sa.Column('amount', sa.Numeric(), nullable=False),
         sa.Column('type', sa.String(), nullable=True),
         sa.ForeignKeyConstraint(['account_id'], ['accounts.id'], ),
+        sa.ForeignKeyConstraint(['trip_id'], ['trips.id'], ),
     )
 
     op.create_unique_constraint(None, 'transactions', ['date', 'description', 'amount'])
