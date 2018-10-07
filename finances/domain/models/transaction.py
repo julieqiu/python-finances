@@ -7,11 +7,13 @@ class Transaction:
                  date,
                  description,
                  amount,
-                 account):
+                 account,
+                 trip):
         self.date = date
         self.description = description
         self.amount = amount
         self.account = account
+        self.trip = trip
 
     @property
     def _classification(self):

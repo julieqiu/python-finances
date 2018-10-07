@@ -1,0 +1,25 @@
+{%- macro render_transactions(transactions) -%}
+<style>
+table {
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+td {
+  padding-right: 5px;
+  font-family: helvetica;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+</style>
+
+<table>
+{% for t in transactions %}
+  <tr>
+    <td>{{ t.date.month }}/{{ t.date.day }}/{{ t.date.year }}</td>
+    <td>{{ t.description }}</td>
+    <td>{{ t.amount }}</td>
+  </tr>
+{% endfor %}
+</table>
+{%- endmacro -%}

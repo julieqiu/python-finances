@@ -7,6 +7,7 @@ from os.path import isfile, join
 from sqlalchemy.dialects.postgresql import insert
 
 from finances.database import db_session
+from finances.database.models import DbTrip
 from finances.database.db_errors import UniqueViolation, split_integrity_error
 
 from finances.app.ingest.constants import CSV_INGEST_INFO
@@ -88,6 +89,7 @@ def csv_to_transactions(filename: str,
                 session.execute(
                     insert(db_model).values(transaction_values)
                 )
+
         except UniqueViolation as err:
             import pdb; pdb.set_trace()
             print(err)

@@ -5,6 +5,7 @@ from flask import Flask, render_template
 from finances.database import db_session
 from finances.database.models import DbTransaction
 from finances.app.controllers.monthly import monthly_reports
+from finances.app.controllers.travel import travel_reports
 
 app = Flask(__name__)
 
@@ -26,11 +27,11 @@ def monthly():
         monthly_reports=monthly_reports()
     )
 
-@app.route('/insurance')
-def insurance():
+@app.route('/travel')
+def travel():
     return render_template(
-        'insurance.html',
-        insurance_claims=insurance_claims()
+        'travel.html',
+        travel_reports=travel_reports()
     )
 
 @app.route('/tmp')

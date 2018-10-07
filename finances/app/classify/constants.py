@@ -28,7 +28,7 @@ CLASSIFICATION_TO_PHRASES = {
             'alcohol': phrases_list('alcohol.txt'),
             'coffee': phrases_list('coffee.txt'),
             'food': phrases_list('food.txt'),
-            'grocery': ['TRADER JOE', 'WHOLEFDS'],
+            'grocery': ['TRADER JOE', 'WHOLEFDS', 'GROCERY', 'GRACEFULLY'],
         },
 
         'Health': {
@@ -37,12 +37,12 @@ CLASSIFICATION_TO_PHRASES = {
         },
 
         'Shopping': {
-            'amazon': ['Amazon'],
+            'amazon': ['Amazon', 'AMZN', ],
             'audible': ['Audible'],
             'aws': ['AWS'],
             'interview_prep': ['INTERVIEWCAKE'],
             'repairs': ['MAX SHOE REPAIR'],
-            'shopping': ['BOOK', 'BEST BUY'],
+            'shopping': ['BOOK', 'BEST BUY', 'EXPRESS#'],
             'stitch_fix': ['STITCH FIX'],
             'walgreens_cvs': ['WALGREENS', 'CVS'],
         },
@@ -84,6 +84,7 @@ CLASSIFICATION_TO_PHRASES = {
             'rent': [
                 'STUYVESANT TOWN',
                 'NOVELPAY PROPRTYPAY',
+                'CLICKPAY PROPRTYPAY PPD',
             ],
             'weight_watchers': ['WEIGHTWATCHERS'],
         },
