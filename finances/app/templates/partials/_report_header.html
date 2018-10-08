@@ -1,0 +1,43 @@
+{%- macro render_report_header(report) -%}
+<style>
+
+.blue {
+  color: cornflowerblue;
+}
+
+.report-name {
+    font-size: 48px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #2196F3;
+}
+
+p.report-summary {
+    font-size: 24px;
+    display: inline-flex;
+    margin-right: 10px;
+    margin-bottom: 0;
+    padding: 2px;
+    background: white;
+}
+
+
+</style>
+
+
+<div>
+  <div class="report-name">{{ report.name }}</div>
+    <div class="report-summary">
+      <p class="report-summary">
+        <span class="blue">{{ report.start_date }}</span>
+      </p>
+      <p class="report-summary">
+        <span class="blue">to</span>
+      </p>
+      <p class="report-summary">
+        <span class="blue">{{ report.end_date }}</span>
+      </p>
+    </div>
+</div>
+
+{%- endmacro -%}

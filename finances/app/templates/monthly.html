@@ -1,4 +1,6 @@
 {% from 'partials/_transactions.html' import render_transactions %}
+{% from 'partials/_report_header.html' import render_report_header %}
+
 {% extends "base.html" %}
 
 {% block content %}
@@ -38,18 +40,6 @@
 
 h2 {
   font-size: 24px;
-}
-
-table {
-  font-size: 18px;
-  margin: 10px 0;
-}
-
-td {
-  padding-right: 5px;
-  font-family: helvetica;
-  font-size: 14px;
-  text-transform: uppercase;
 }
 
 
@@ -107,38 +97,41 @@ h2.l3 {
     margin: 20px 0;
 }
 
+
 </style>
-{% for month, report_dict in monthly_reports.items() %}
+{% for monthly_report in monthly_reports %}
 <div class="card overview">
-  <div class="month">{{ month }}</div>
+  {{ render_report_header(monthly_report) }}
+
   <div class="summary">
     <p class="summary">
       <span>Earned: </span>
-      <span class="green">${{ report_dict.total_earned }}</span>
+      <span class="green">${{ monthly_report.total_earned }}</span>
     </p>
     <p class="summary">
       <span>Spent: </span>
-      <span class="red">${{ report_dict.total_spent }}</span>
+      <span class="red">${{ monthly_report.total_spent }}</span>
     </p>
     <p class="summary">
       <span>Saved: </span>
-      {% if report_dict %}
-        {% if report_dict.total_saved > 0 %}
-          <span class="green">${{ report_dict.total_saved }}</span>
+      {% if monthly_report %}
+        {% if monthly_report.total_saved > 0 %}
+          <span class="green">${{ monthly_report.total_saved }}</span>
         {% else %}
-          <span class="red">${{ report_dict.total_saved }}</span>
+          <span class="red">${{ monthly_report.total_saved }}</span>
         {% endif %}
       {% endif %}
     </p>
   </div>
 
-  {% for report in report_dict.reports %}
+  {% for report in monthly_report.reports %}
     {% if report and report.data %}
     <div class="group">
       <h2 class="l1">
         <span>{{ report.header }}: </span>
         <span>{{ report.data.total }}</span>
       </h2>
+
 
       {% for l2, l2_report in report.data.categories.items() %}
 
@@ -155,6 +148,7 @@ h2.l3 {
 
         {% endfor %}
       {% endfor %}
+
     </div>
     {% endif %}
   {% endfor %}

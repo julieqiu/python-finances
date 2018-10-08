@@ -3,6 +3,7 @@
 table {
   font-size: 18px;
   margin: 10px 0;
+  background: white;
 }
 
 td {
@@ -11,9 +12,18 @@ td {
   font-size: 14px;
   text-transform: uppercase;
 }
+
+.bold {
+  font-weight: bold;
+}
 </style>
 
 <table>
+<tr class="bold">
+  <td>Date</td>
+  <td>Description</td>
+  <td>Amount</td>
+</tr>
 {% for t in transactions %}
   <tr>
     <td>{{ t.date.month }}/{{ t.date.day }}/{{ t.date.year }}</td>

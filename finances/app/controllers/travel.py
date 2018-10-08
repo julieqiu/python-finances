@@ -3,27 +3,12 @@ import datetime
 from finances.database.models import DbTransaction, DbTrip
 from finances.database import db_session
 from finances.domain.constructors import db_transaction_to_domain_transaction, db_trip_to_domain_trip
-from finances.domain.models import Report, Trip, Transaction
-
-
-INT_TO_MONTH = {
-    1: 'January',
-    2: 'February',
-    3: 'March',
-    4: 'April',
-    5: 'May',
-    6: 'June',
-    7: 'July',
-    8: 'August',
-    9: 'September',
-    10: 'October',
-    11: 'November',
-    12: 'December',
-}
+from finances.domain.models import TripReport, Transaction
 
 
 def travel_reports():
     trips = {}
+
     with db_session() as session:
         db_transactions = session.query(DbTransaction).all()
         transactions = []
@@ -34,16 +19,15 @@ def travel_reports():
                     db_transaction_to_domain_transaction(db_trans, db_trip)
                 )
 
-        for t in transactions:
-            if not t.trip:
-                print('not a trip transaction')
-                continue
+    for t in transactions:
+        if not t.trip:
+            print('not a trip transaction')
+            continue
 
-            if not trips.get(t.trip.name):
-                trips[t.trip.name] = {}
-                trips[t.trip.name]['start_date'] = t.trip.start_date
-                trips[t.trip.name]['end_date'] = t.trip.end_date
-                trips[t.trip.name]['transactions'] = []
-            trips[t.trip.name]['transactions'].append(t)
+        if not trips.get(t.trip.name):
+            trips[t.trip.name] = TripReport(t.trip, [])
+        trips[t.trip.name].add_transaction(t)
 
-    return trips
+    x = sorted([v for _, v in trips.items()], key=lambda v: v.trip.start_date, reverse=True)
+    print(x)
+    return x
