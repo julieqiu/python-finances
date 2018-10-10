@@ -1,11 +1,16 @@
 import datetime
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 from finances.database import db_session
-from finances.database.models import DbTransaction
 from finances.app.controllers.monthly import monthly_reports
 from finances.app.controllers.travel import travel_reports
+from finances.app.controllers.transactions import (
+    all_transactions,
+    all_trip_transactions,
+    all_trip_categories,
+    all_trips,
+)
 
 app = Flask(__name__)
 
@@ -70,12 +75,6 @@ def tmp():
         # categories=[category for category in CATEGORIES if len(category['transactions']) > 0],
     )
 
-def transactions_for_term(term: str):
-    with db_session() as session:
-        return session.query(DbTransaction).filter(
-            DbTransaction.description.ilike('%{}%'.format(term))
-        )
-
 
 @app.route('/banks')
 def banks():
@@ -99,15 +98,31 @@ def banks():
     )
 
 
-
-
-
 @app.route('/transactions')
 def transactions():
-    with db_session() as session:
-        transactions = session.query(DbTransaction).all()
+    return render_template(
+        'transactions.html',
+        transactions=all_transactions()
+    )
+
+
+@app.route('/transaction-trips', methods=['GET', 'POST'])
+def trip_transactions():
+    if request.method == 'GET':
+        return render_template(
+            'transactions.html',
+            transactions=all_trip_transactions(),
+            trip_categories=all_trip_categories(),
+            trips=all_trips(),
+        )
+
+    for key, value in request.form.items():
+        if value:
+            print(key, value)
 
     return render_template(
         'transactions.html',
-        transactions=transactions
+        transactions=all_trip_transactions(),
+        trip_categories=all_trip_categories(),
+        trips=all_trips(),
     )

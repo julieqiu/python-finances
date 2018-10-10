@@ -4,16 +4,21 @@ from finances.app.classify.constants import CLASSIFICATION_TO_PHRASES
 class Transaction:
 
     def __init__(self,
+                 id,
                  date,
                  description,
                  amount,
                  account,
-                 trip):
+                 trip,
+                 trip_category):
+
+        self.id = id
         self.date = date
         self.description = description
         self.amount = amount
         self.account = account
         self.trip = trip
+        self.trip_category = trip_category.name if trip_category else None
 
     @property
     def _classification(self):

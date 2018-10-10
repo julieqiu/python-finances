@@ -28,7 +28,7 @@ CSV_INGEST_INFO = {
         'CSV_DIRECTORY': '{}/insurance/'.format(DIR_BASE),
     },
 
-    'EXPENSES': {
+    'TRANSACTIONS': {
         'DB_MODEL': DbTransaction,
         'CSV_COL_TO_DB_COL': {
             'AMOUNT': 'amount',

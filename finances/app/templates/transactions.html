@@ -18,20 +18,67 @@ td {
 
 </style>
 
+<form action="/transaction-trips" method="POST" id="my_form"></form>
+  <div style="width: 92%;">
+    <button type="submit" form="my_form" style="float: right;">Submit</button>
+  </div>
   <table>
     <tr>
+      <td class="header">Id</td>
       <td class="header">Date</td>
       <td class="header">Description</td>
       <td class="header">Amount</td>
-      <td class="header">Type</td>
+      <td class="header">L2</td>
+      <td class="header">L3</td>
+      <td class="header">Trip</td>
+      <td class="header">Trip Category</td>
     <tr>
     {% for transaction in transactions %}
     <tr>
+      <td>{{ transaction.id }}</td>
       <td>{{ transaction.date }}</td>
       <td>{{ transaction.description }}</td>
       <td>${{ transaction.amount }}</td>
-      <td>{{ transaction.type }}</td>
+      <td>{{ transaction.l2 }}</td>
+      <td>{{ transaction.l3 }}</td>
+      <td>{{ transaction.trip.name }}</td>
+      <td>{{ transaction.trip_category }}</td>
+    </tr>
+
+    <tr>
+      <td></td>
+      <td></td>
+      <td>
+        <input
+          type="text"
+          name="description-{{ transaction.id }}"
+          form="my_form"
+          placeholder="{{ transaction.description }}"
+          style="width: 100%;"
+        />
+      </td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>
+        <select name="trip-{{ transaction.id }}" form="my_form" value="{{ transaction.trip }}">
+          <option disabled selected value> -- select an option -- </option>
+          {% for trip in trips  %}
+            <option>{{ trip }}</option>
+          {% endfor %}
+        </select>
+      </td>
+      <td>
+        <select name="tripcategory-{{ transaction.id }}" form="my_form">
+          <option disabled selected value> -- select an option -- </option>
+          {% for category in trip_categories %}
+            <option>{{ category }}</option>
+          {% endfor %}
+        </select>
+      </td>
     </tr>
     {% endfor %}
   </table>
+
+</form>
 {% endblock %}

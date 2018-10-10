@@ -9,14 +9,17 @@ from finances.domain.models import TripReport, Transaction
 def travel_reports():
     trips = {}
 
+    transactions = []
     with db_session() as session:
-        db_transactions = session.query(DbTransaction).all()
-        transactions = []
-        for db_trans in db_transactions:
-            if db_trans.trip_id:
-                db_trip = session.query(DbTrip).get(db_trans.trip_id)
+        db_trips = session.query(DbTrip).all()
+        for db_trip in db_trips:
+            for db_trip_transaction in db_trip.trip_transactions:
                 transactions.append(
-                    db_transaction_to_domain_transaction(db_trans, db_trip)
+                    db_transaction_to_domain_transaction(
+                        db_trip_transaction.transaction,
+                        db_trip,
+                        db_trip_transaction.category,
+                    )
                 )
 
     for t in transactions:

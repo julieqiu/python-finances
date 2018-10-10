@@ -1,6 +1,6 @@
 from sqlalchemy.orm import relationship
-from sqlalchemy import Boolean, Column, String, Date, Text, ARRAY, Integer, ForeignKey, Numeric, Enum
 from sqlalchemy import (
+    Boolean, Column, String, Date, Text, ARRAY, Integer, ForeignKey, Numeric, Enum,
     ForeignKey, UniqueConstraint
 )
 
@@ -16,3 +16,6 @@ class DbTripTransaction(Base):
     trip_id = Column(ForeignKey('trips.id'), nullable=False)
     transaction_id = Column(ForeignKey('transactions.id'), nullable=False, unique=True)
     category = Column(Enum(TripTransactionCategory), nullable=True)
+
+    transaction = relationship('DbTransaction', lazy='joined')
+    trip = relationship('DbTrip', lazy='joined')

@@ -1,14 +1,13 @@
-from sqlalchemy.orm import relationship
-from sqlalchemy import Boolean, Column, String, Date, Text, ARRAY, Integer, ForeignKey, Numeric
 from sqlalchemy import (
+    Boolean, Column, String, Date, Text, ARRAY, Integer, ForeignKey, Numeric,
     ForeignKey, UniqueConstraint
 )
+from sqlalchemy.orm import relationship
 
 from finances.database.models.base import Base
 
 
 class DbTransaction(Base):
-
     __tablename__ = 'transactions'
     __table_args__ = (
         UniqueConstraint('date', 'description', 'amount'),
@@ -22,4 +21,3 @@ class DbTransaction(Base):
     reimbursable = Column(Boolean, nullable=True)
     reimbursement = Column(Boolean, nullable=True)
     account_id = Column(ForeignKey('accounts.id'), nullable=True)
-    trip_id = Column(ForeignKey('trips.id'), nullable=True)
