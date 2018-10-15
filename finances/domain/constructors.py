@@ -11,6 +11,9 @@ def db_transaction_to_domain_transaction(db_transaction: DbTransaction, trip: Tr
         account=db_transaction.account_id,
         trip=trip,
         trip_category=trip_category,
+        l1=db_transaction.l1,
+        l2=db_transaction.l2,
+        l3=db_transaction.l3,
     )
 
 

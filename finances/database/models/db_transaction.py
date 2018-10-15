@@ -5,6 +5,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship
 
 from finances.database.models.base import Base
+from finances.database.models.db_transaction_classification import DbTransactionClassification
 
 
 class DbTransaction(Base):
@@ -21,3 +22,28 @@ class DbTransaction(Base):
     reimbursable = Column(Boolean, nullable=True)
     reimbursement = Column(Boolean, nullable=True)
     account_id = Column(ForeignKey('accounts.id'), nullable=True)
+    classification_id = Column(ForeignKey('transaction_classifications.id'), nullable=True)
+
+    classification = relationship(
+        DbTransactionClassification,
+        primaryjoin='DbTransactionClassification.id == DbTransaction.classification_id',
+        backref='transaction_classifications'
+    )
+
+    @property
+    def l1(self):
+        if self.classification:
+            return self.classification.l1
+        return None
+
+    @property
+    def l2(self):
+        if self.classification:
+            return self.classification.l2
+        return None
+
+    @property
+    def l3(self):
+        if self.classification:
+            return self.classification.l3
+        return None

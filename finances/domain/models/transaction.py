@@ -10,7 +10,10 @@ class Transaction:
                  amount,
                  account,
                  trip,
-                 trip_category):
+                 trip_category,
+                 l1,
+                 l2,
+                 l3):
 
         self.id = id
         self.date = date
@@ -19,16 +22,9 @@ class Transaction:
         self.account = account
         self.trip = trip
         self.trip_category = trip_category.name if trip_category else None
-
-    @property
-    def _classification(self):
-        for l1, l1_dict in CLASSIFICATION_TO_PHRASES.items():
-            for l2, l2_dict in l1_dict.items():
-                for l3, phrases in l2_dict.items():
-                    for phrase in phrases:
-                        if phrase.lower() in self.description.lower():
-                            return (l1, l2, l3)
-        return ('EXPENSES', 'Other', 'Other')
+        self.l1 = l1
+        self.l2 = l2
+        self.l3 = l3
 
     @property
     def month(self):
@@ -37,15 +33,3 @@ class Transaction:
     @property
     def year(self):
         return self.date.year
-
-    @property
-    def l1(self):
-        return self._classification[0]
-
-    @property
-    def l2(self):
-        return self._classification[1]
-
-    @property
-    def l3(self):
-        return self._classification[2]
