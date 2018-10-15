@@ -82,6 +82,9 @@ def str_to_date(s: str) -> datetime.date:
     return current_date
 
 
+def date_to_str(d: datetime.date) -> str:
+    return d.strftime('%m-%d-%Y')
+
 def transaction_values_from_csv_row(csv_row: dict, csv_col_to_db_col: dict):
     transaction_values = dict()
     for csv_col, csv_val in csv_row.items():
@@ -138,10 +141,13 @@ def csvfiles_to_transaction_values(filenames: list,
         )
 
         for v in values:
-            date_str = v.get('date')
-            if not date_str:
-                date_str = v.get('service_date')
-            if date_str > max_date:
+            d = v.get('date')
+            if not d:
+                d = v.get('service_date')
+                date_str = date_to_str(d)
+            else:
+                date_str = date_to_str(d)
+            if d > max_date:
                 if v.get('description'):
                     hash_key = v['description'] + date_str
                 else:
@@ -155,7 +161,7 @@ def csvfiles_to_transaction_values(filenames: list,
 
                 v['account_id'] = account_id
                 all_values.append(v)
-            elif date_str == max_date:
+            elif d == max_date:
                 # TODO: Scan the end of all_values to see if we missed anything
                 pass
 
@@ -163,9 +169,9 @@ def csvfiles_to_transaction_values(filenames: list,
             continue
 
         try:
-            max_date = str_to_date(all_values[-1]['date'])
+            max_date = all_values[-1]['date']
         except Exception:
-            max_date = str_to_date(all_values[-1]['service_date'])
+            max_date = all_values[-1]['service_date']
 
     return values
 
