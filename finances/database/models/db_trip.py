@@ -20,7 +20,7 @@ class DbTrip(Base):
     start_date = Column(Date, nullable=False)
     end_date = Column(Date, nullable=False)
     trip_transactions = relationship(
-        DbTripTransaction, primaryjoin='DbTripTransaction.trip_id == DbTrip.id', backref='db_trip_transactions'
+        DbTripTransaction, primaryjoin='DbTripTransaction.trip_id == DbTrip.id', backref='trip_transactions'
     )
 
     @property
