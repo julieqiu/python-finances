@@ -1,7 +1,7 @@
 from finances.app.ingest.ingest_accounts import ingest_accounts
 from finances.app.ingest.ingest_trips import ingest_trips
-from finances.app.ingest.ingest_expenses import ingest_expenses
-# from finances.app.ingest.ingest_insurance_claims import ingest_insurance_claims
+from finances.app.ingest.ingest_transactions import ingest_transactions
+from finances.app.ingest.ingest_insurance_claims import ingest_insurance_claims
 # from finances.app.ingest.ingest_travel_expenses import ingest_travel_expenses
 
 from finances.database import db_session
@@ -29,9 +29,9 @@ def main():
     print()
     ingest_trips()
     print()
-    ingest_expenses('TRANSACTIONS')
+    ingest_transactions()
     print()
-    ingest_expenses('INSURANCE_CLAIMS')
+    ingest_insurance_claims()
 
 
 if __name__ == '__main__':
