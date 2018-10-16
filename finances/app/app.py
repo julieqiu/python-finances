@@ -8,8 +8,10 @@ from finances.app.controllers.travel import travel_reports
 from finances.app.controllers.transactions import (
     all_transactions,
     all_trip_transactions,
-    all_trip_categories,
-    all_trips,
+    transaction_classifications,
+    trip_id_and_names,
+    trip_transaction_category_names,
+    update_table_values,
 )
 
 app = Flask(__name__)
@@ -98,31 +100,41 @@ def banks():
     )
 
 
-@app.route('/transactions')
+@app.route('/transactions', methods=['GET', 'POST'])
 def transactions():
+    if request.method != 'GET':
+        with db_session() as session:
+            for key, value in request.form.items():
+                if value:
+                    db_table = key.split('-')[0]
+                    db_col = key.split('-')[1]
+                    db_val = key.split('-')[2]
+
+                    if len(value.split('-')) == 2:
+                        db_col2 = value.split('-')[0]
+                        db_val2 = value.split('-')[1]
+                    else:
+                        db_col2 = db_col
+                        db_col = 'id'
+                        db_val2 = value
+
+                    update_table_values(
+                        db_table,
+                        update_values=(db_col2, db_val2),
+                        where_values=(db_col, db_val),
+                        session=session,
+                    )
+
+
+    if 'trips' in str(request.query_string):
+        transactions = all_trip_transactions()
+    else:
+        transactions = all_transactions()
+
     return render_template(
         'transactions.html',
-        transactions=all_transactions()
-    )
-
-
-@app.route('/transaction-trips', methods=['GET', 'POST'])
-def trip_transactions():
-    if request.method == 'GET':
-        return render_template(
-            'transactions.html',
-            transactions=all_trip_transactions(),
-            trip_categories=all_trip_categories(),
-            trips=all_trips(),
-        )
-
-    for key, value in request.form.items():
-        if value:
-            print(key, value)
-
-    return render_template(
-        'transactions.html',
-        transactions=all_trip_transactions(),
-        trip_categories=all_trip_categories(),
-        trips=all_trips(),
+        transactions=transactions,
+        trip_categories=trip_transaction_category_names(),
+        trip_id_and_names=trip_id_and_names(),
+        # transaction_classifications=transaction_classifications(),
     )

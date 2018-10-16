@@ -18,7 +18,7 @@ td {
 
 </style>
 
-<form action="/transaction-trips" method="POST" id="my_form"></form>
+<form action="/transactions" method="POST" id="my_form"></form>
   <div style="width: 92%;">
     <button type="submit" form="my_form" style="float: right;">Submit</button>
   </div>
@@ -51,7 +51,7 @@ td {
       <td>
         <input
           type="text"
-          name="description-{{ transaction.id }}"
+          name="transactions-description-{{ transaction.id }}"
           form="my_form"
           placeholder="{{ transaction.description }}"
           style="width: 100%;"
@@ -61,18 +61,18 @@ td {
       <td></td>
       <td></td>
       <td>
-        <select name="trip-{{ transaction.id }}" form="my_form" value="{{ transaction.trip }}">
+        <select name="trip_transactions-transaction_id-{{ transaction.id }}" form="my_form" value="{{ transaction.trip }}">
           <option disabled selected value> -- select an option -- </option>
-          {% for trip in trips  %}
-            <option>{{ trip }}</option>
+          {% for trip_id, trip_name in trip_id_and_names  %}
+            <option value="trip_id-{{ trip_id }}">{{ trip_name }}</option>
           {% endfor %}
         </select>
       </td>
       <td>
-        <select name="tripcategory-{{ transaction.id }}" form="my_form">
+        <select name="trip_transactions-transaction_id-{{ transaction.id }}" form="my_form">
           <option disabled selected value> -- select an option -- </option>
           {% for category in trip_categories %}
-            <option>{{ category }}</option>
+            <option value="category-{{ category }}">{{ category }}</option>
           {% endfor %}
         </select>
       </td>
