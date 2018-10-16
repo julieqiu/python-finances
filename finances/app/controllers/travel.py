@@ -24,13 +24,10 @@ def travel_reports():
 
     for t in transactions:
         if not t.trip:
-            print('not a trip transaction')
             continue
 
         if not trips.get(t.trip.name):
             trips[t.trip.name] = TripReport(t.trip, [])
         trips[t.trip.name].add_transaction(t)
 
-    x = sorted([v for _, v in trips.items()], key=lambda v: v.trip.start_date, reverse=True)
-    print(x)
-    return x
+    return sorted([v for _, v in trips.items()], key=lambda v: v.trip.start_date, reverse=True)
