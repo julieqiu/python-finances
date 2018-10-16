@@ -6,17 +6,17 @@ from finances.database import db_session
 from finances.domain.constructors import db_transaction_to_domain_transaction, db_trip_to_domain_trip
 
 
-def all_transactions(trips=False):
+def all_transactions():
     transactions = []
     with db_session() as session:
         db_transactions = session.query(DbTransaction).all()
         for db_trans in db_transactions:
-            if trips and db_trans.trip_id:
-                    db_trip = session.query(DbTrip).get(db_trans.trip_id)
-                    transactions.append(
-                        db_transaction_to_domain_transaction(db_trans, db_trip)
-                    )
-            elif db_trans.l1 != 'SKIPPED':
+            # if db_trans.trip_id:
+            #     db_trip = session.query(DbTrip).get(db_trans.trip_id)
+            #     transactions.append(
+            #         db_transaction_to_domain_transaction(db_trans, db_trip)
+            #     )
+            if db_trans.l1 != 'SKIPPED':
                 transactions.append(
                     db_transaction_to_domain_transaction(db_trans)
                 )
@@ -34,6 +34,17 @@ def update_table_values(db_table: str, update_values: tuple, where_values: tuple
             where_col=where_values[0],
             where_val=where_values[1],
     )
+    if not update_values[1] and db_table == 'trip_transactions':
+        update_statement = """ DELETE FROM {table} \
+            WHERE {where_col}='{where_val}'
+        """.format(
+            table=db_table,
+            where_col=where_values[0],
+            where_val=where_values[1],
+        )
+
+    print(update_statement)
+
     session.execute(update_statement)
 
 
@@ -43,8 +54,13 @@ def all_trip_transactions():
         db_trips = session.query(DbTrip).all()
         for db_trip in db_trips:
             trip = db_trip_to_domain_trip(db_trip)
-            for trans in trip.transactions:
-                transactions.append(trans)
+            for tt in db_trip.trip_transactions:
+                transactions.append(
+                    db_transaction_to_domain_transaction(
+                        tt.transaction,
+                        db_trip,
+                        tt.category)
+                )
     return transactions
 
 

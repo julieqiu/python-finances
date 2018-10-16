@@ -41,7 +41,11 @@ td {
       <td>${{ transaction.amount }}</td>
       <td>{{ transaction.l2 }}</td>
       <td>{{ transaction.l3 }}</td>
-      <td>{{ transaction.trip.name }}</td>
+      {% if transaction.trip %}
+        <td>{{ transaction.trip.name }}</td>
+      {% else %}
+        <td></td>
+      {% endif %}
       <td>{{ transaction.trip_category }}</td>
     </tr>
 
@@ -63,6 +67,7 @@ td {
       <td>
         <select name="trip_transactions-transaction_id-{{ transaction.id }}" form="my_form" value="{{ transaction.trip }}">
           <option disabled selected value> -- select an option -- </option>
+          <option value="trip_id-{{ trip_id }}"></option>
           {% for trip_id, trip_name in trip_id_and_names  %}
             <option value="trip_id-{{ trip_id }}">{{ trip_name }}</option>
           {% endfor %}
@@ -71,6 +76,7 @@ td {
       <td>
         <select name="trip_transactions-transaction_id-{{ transaction.id }}" form="my_form">
           <option disabled selected value> -- select an option -- </option>
+          <option value="category-"></option>
           {% for category in trip_categories %}
             <option value="category-{{ category }}">{{ category }}</option>
           {% endfor %}
