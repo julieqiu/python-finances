@@ -24,7 +24,7 @@ table {
 {% for report in travel_reports %}
 <div class="report">
   {{ render_report_header(report) }}
-  {{ render_transactions(report.transactions) }}
+  {{ render_transactions(report.housing_transactions) }}
 </div>
 {% endfor %}
 

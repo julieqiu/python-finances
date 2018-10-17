@@ -117,6 +117,10 @@ def is_valid_transaction_values(transaction_values: dict,
     return True
 
 
+def edit_duplicates(transaction_values: list) -> list:
+
+
+
 def csvfiles_to_transaction_values(filenames: list,
                                    last_transaction_date: datetime.date,
                                    csv_col_to_db_col: dict,
@@ -139,6 +143,7 @@ def csvfiles_to_transaction_values(filenames: list,
             skip_if_missing,
             optional_cols
         )
+        values = edit_duplicates(values)
 
         for v in values:
             d = v.get('date')

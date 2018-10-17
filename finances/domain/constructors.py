@@ -24,6 +24,7 @@ def db_transaction_to_domain_transaction(db_transaction: DbTransaction,
 
 def db_trip_to_domain_trip(db_trip: DbTrip):
     return Trip(
+        id=db_trip.id,
         name=db_trip.name,
         start_date=db_trip.start_date,
         end_date=db_trip.end_date,

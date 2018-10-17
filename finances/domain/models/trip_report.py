@@ -1,3 +1,4 @@
+from finances.database.models.enums import TripTransactionCategory
 from . import Report
 
 
@@ -22,25 +23,39 @@ class TripReport(Report):
             if t.trip and t.trip.name == self.trip.name
         ], key=lambda t: t.date, reverse=True)
 
+
+    def _transactions_for_category(self, category):
+        return [
+            t for t in self.transactions
+            if t.trip_category == category
+        ]
+
     @property
     def housing_transactions(self):
-        pass
+        return self._transactions_for_category(TripTransactionCategory.HOUSING.name)
 
     @property
     def travel_transactions(self):
-        pass
+        return self._transactions_for_category(TripTransactionCategory.TRAVEL.name)
 
     @property
     def food_transactions(self):
-        pass
+        return self._transactions_for_category(TripTransactionCategory.FOOD.name)
 
     @property
     def entertainment_transactions(self):
-        pass
+        return self._transactions_for_category(TripTransactionCategory.ENTERTAINMENT.name)
 
     @property
     def local_transportation_transactions(self):
-        pass
+        return self._transactions_for_category(TripTransactionCategory.LOCAL_TRANSPORTATION.name)
+
+    @property
+    def other_transportation_transactions(self):
+        return [
+            t for t in self.transactions
+            if not t.trip_category
+        ]
 
     def to_dict(self) -> dict:
         if not self.transactions:
