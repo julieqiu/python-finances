@@ -13,12 +13,14 @@ from finances.database.models import DbTransaction, DbAccount, DbTransactionClas
 from finances.database.db_errors import UniqueViolation, split_integrity_error
 
 from finances.app.ingest.constants import CSV_INGEST_INFO
-from finances.app.ingest.helper_ingest_expenses import (
+from finances.app.ingest.helpers.helper_filenames import (
     files_in_directory,
     group_filenames_by_account,
-    last_transaction_date_for_account,
-    csvfiles_to_transaction_values,
-    write_transaction_values_to_db)
+)
+from finances.app.ingest.helpers.helper_expenses import (
+    csvfiles_to_db_row_values,
+    write_values_to_db,
+)
 
 TRANSACTIONS_CSV_INGEST_INFO = CSV_INGEST_INFO['TRANSACTIONS']
 
@@ -37,6 +39,9 @@ def ingest_transactions():
     filenames = files_in_directory(TRANSACTIONS_CSV_INGEST_INFO['CSV_DIRECTORY'])
     account_to_filenames = group_filenames_by_account(filenames)
 
+    with db_session() as session:
+        transaction_classifications = session.query(DbTransactionClassification).all()
+
     # 3) Process files
     for account_id, filenames in account_to_filenames.items():
         print(
@@ -52,33 +57,27 @@ def ingest_transactions():
         """
         )
 
-        with db_session() as session:
-            last_transaction_date = last_transaction_date_for_account(
-                account_id, session)
-            transaction_classifications = session.query(
-                DbTransactionClassification
-            ).all()
-
-        transaction_values = csvfiles_to_transaction_values(
+        transaction_values = csvfiles_to_db_row_values(
             filenames=filenames,
-            last_transaction_date=last_transaction_date,
             csv_col_to_db_col=TRANSACTIONS_CSV_INGEST_INFO['CSV_COL_TO_DB_COL'],
             skip_if_missing=TRANSACTIONS_CSV_INGEST_INFO['SKIP_IF_MISSING'],
             optional_cols=TRANSACTIONS_CSV_INGEST_INFO['OPTIONAL_COLS'],
             account_id=account_id,
         )
 
-        transaction_values = [
+        for db_row_value in [
             classify_transaction(
                 tv, transaction_classifications
             )
             for tv in transaction_values
-        ]
+        ]:
+            write_values_to_db(
+                db_row_value,
+                db_model=TRANSACTIONS_CSV_INGEST_INFO['DB_MODEL'],
+            )
+            print(db_row_value['date'], db_row_value['description'])
 
-        write_transaction_values_to_db(
-            transaction_values,
-            TRANSACTIONS_CSV_INGEST_INFO['DB_MODEL'],
-            filenames[0])
+
 
 
 if __name__ == '__main__':

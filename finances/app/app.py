@@ -2,7 +2,6 @@ import datetime
 
 from flask import Flask, render_template, request
 
-from finances.database import db_session
 from finances.app.controllers.monthly import monthly_reports
 from finances.app.controllers.travel import travel_reports
 from finances.app.controllers.transactions import (
@@ -13,6 +12,7 @@ from finances.app.controllers.transactions import (
     trip_transaction_category_names,
     update_table_values,
 )
+from finances.database import db_session
 
 app = Flask(__name__)
 
@@ -125,14 +125,24 @@ def transactions():
                         session=session,
                     )
 
+    if 'trips' in request.args.keys():
+        trip_id = request.args.get('id')
+        if trip_id and trip_id.isnumeric():
+            trip_id = int(trip_id)
 
-    if 'trips' in str(request.query_string):
-        transactions = all_trip_transactions()
+        category = request.args.get('category')
+
+        transactions = all_trip_transactions(trip_id, category)
+
     else:
-        transactions = all_transactions()
+        l1 = request.args.get('l1')
+        l2 = request.args.get('l2')
+        l3 = request.args.get('l3')
+        transactions = all_transactions(l1, l2, l3)
 
     return render_template(
         'transactions.html',
+        url=request.url,
         transactions=transactions,
         trip_categories=trip_transaction_category_names(),
         trip_id_and_names=trip_id_and_names(),
