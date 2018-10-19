@@ -51,7 +51,7 @@ class TripReport(Report):
         return self._transactions_for_category(TripTransactionCategory.LOCAL_TRANSPORTATION.name)
 
     @property
-    def other_transportation_transactions(self):
+    def other_transactions(self):
         return [
             t for t in self.transactions
             if not t.trip_category

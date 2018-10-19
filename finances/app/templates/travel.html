@@ -24,7 +24,18 @@ table {
 {% for report in travel_reports %}
 <div class="report">
   {{ render_report_header(report) }}
+  <h3>Housing</h3>
   {{ render_transactions(report.housing_transactions) }}
+  <h3>Food</h3>
+  {{ render_transactions(report.food_transactions) }}
+  <h3>Entertainment</h3>
+  {{ render_transactions(report.entertainment_transactions) }}
+  <h3>Travel</h3>
+  {{ render_transactions(report.travel_transactions) }}
+  <h3>Local Transportation</h3>
+  {{ render_transactions(report.local_transportation_transactions) }}
+  <h3>Other</h3>
+  {{ render_transactions(report.other_transactions) }}
 </div>
 {% endfor %}
 

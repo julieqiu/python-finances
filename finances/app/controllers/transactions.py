@@ -94,20 +94,24 @@ def update_table_values(db_table: str, update_values: tuple, where_values: tuple
             session.execute(update_statement)
 
 
-def all_trip_transactions(trip_id: int, category: str):
+def all_trip_transactions(trip_id: int, trip_category: str):
     transactions = []
-    print(trip_id, category)
+    print(trip_id, trip_category)
     with db_session() as session:
         if not trip_id:
             db_trips = session.query(DbTrip).all()
         else:
             db_trips = session.query(DbTrip).filter_by(id=trip_id).all()
 
-        print(len(db_trips))
+        print('num trips', len(db_trips))
         for db_trip in db_trips:
             trip = db_trip_to_domain_trip(db_trip)
             for tt in db_trip.trip_transactions:
-                if category and (not tt.category or tt.category.name != category):
+                if not trip_category and tt.category:
+                    continue
+                elif trip_category and not tt.category:
+                    continue
+                elif trip_category and tt.category.name != trip_category.upper():
                     continue
 
                 transactions.append(
@@ -116,6 +120,9 @@ def all_trip_transactions(trip_id: int, category: str):
                         db_trip,
                         tt.category)
                 )
+
+
+    print('num transactions', len(transactions))
     return transactions
 
 

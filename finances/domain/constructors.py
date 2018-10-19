@@ -8,10 +8,15 @@ def db_transaction_to_domain_transaction(db_transaction: DbTransaction,
     domain_trip = None
     if db_trip:
         domain_trip = db_trip_to_domain_trip(db_trip)
+
+    description = db_transaction.description_edited
+    if not description:
+        description = db_transaction.description
+
     return Transaction(
         id=db_transaction.id,
         date=db_transaction.date,
-        description=db_transaction.description,
+        description=description,
         amount=db_transaction.amount,
         account=db_transaction.account_id,
         trip=domain_trip,

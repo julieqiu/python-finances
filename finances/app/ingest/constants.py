@@ -32,7 +32,7 @@ CSV_INGEST_INFO = {
         'DB_MODEL': DbTransaction,
         'CSV_COL_TO_DB_COL': {
             'AMOUNT': 'amount',
-            'POST DATE': 'date',
+            'TRANS DATE': 'date',
             'POSTING DATE': 'date',
             'DATE': 'date',
             'DESCRIPTION': 'description',

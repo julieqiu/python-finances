@@ -18,6 +18,7 @@ class DbTransaction(Base):
     date = Column(Date, nullable=False)
     type = Column(String, nullable=False)
     description = Column(String, nullable=False)
+    description_edited = Column(String, nullable=False)
     amount = Column(Numeric, nullable=False)
     reimbursable = Column(Boolean, nullable=True)
     reimbursement = Column(Boolean, nullable=True)
@@ -30,20 +31,21 @@ class DbTransaction(Base):
         backref='transaction_classifications'
     )
 
+
     @property
-    def l1(self):
+    def l1(self) -> str:
         if self.classification:
             return self.classification.l1
-        return None
+        return ''
 
     @property
-    def l2(self):
+    def l2(self) -> str:
         if self.classification:
             return self.classification.l2
-        return None
+        return ''
 
     @property
-    def l3(self):
+    def l3(self) -> str:
         if self.classification:
             return self.classification.l3
-        return None
+        return ''
