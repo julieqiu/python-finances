@@ -11,7 +11,12 @@ CATEGORY_TO_PHRASES = {
     TripTransactionCategory.ENTERTAINMENT: ['TOURS'],
     TripTransactionCategory.FOOD: [],
     TripTransactionCategory.HOUSING: ['HOTEL', 'AIRBNB', 'BOOKING', 'INN'],
-    TripTransactionCategory.LOCAL_TRANSPORTATION: ['UBER', 'LYFT', 'TAXI'],
+    TripTransactionCategory.LOCAL_TRANSPORTATION: [
+        'LYFT',
+        'METRO',
+        'TAXI',
+        'UBER',
+    ],
     TripTransactionCategory.TRAVEL: [
         'AIRLINE',
         'AMERICAN',
@@ -54,7 +59,7 @@ def categorize_trip_transaction(domain_trans: DbTransaction) -> str:
 
     if domain_trans.l2 in [k.name for k in CATEGORY_TO_PHRASES.keys()]:
         return domain_trans.l2
-    return None
+    return 'FOOD'
 
 
 def should_categorize(domain_trans) -> bool:
@@ -76,20 +81,16 @@ def should_categorize(domain_trans) -> bool:
 
 def ingest_trip_transactions():
     with db_session() as session:
-        db_trips = session.query(DbTrip).all()
-        trip_transaction_ids = set()
-        for trip in db_trips:
-            trip_transaction_ids.update([
-                tt.transaction_id
-                for tt in trip.trip_transactions
-            ])
-
+        trip_transaction_ids = {
+            tt.transaction_id for tt in
+            session.query(DbTripTransaction).all()
+        }
         print(len(trip_transaction_ids))
         domain_transactions = []
-        for trip in db_trips:
+        for trip in session.query(DbTrip).all():
             for t in session.query(DbTransaction).all():
                 if t.id in trip_transaction_ids:
-                    print('Skipping - already in table')
+                    print('Skipping - already in table and categorized')
                     continue
                 elif trip.start_date <= t.date <= trip.end_date:
                     domain_transactions.append(

@@ -7,3 +7,4 @@ class TripTransactionCategory(Enum):
     HOUSING = 'housing'
     LOCAL_TRANSPORTATION = 'local_transportation'
     TRAVEL = 'travel'
+    OTHER = 'other'

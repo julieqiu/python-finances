@@ -17,6 +17,20 @@ class TripReport(Report):
         return self.trip.name
 
     @property
+    def total(self) -> float:
+        total = 0
+        for t in self.transactions:
+            total += t.amount
+        print(self.name, ': ', total)
+        return total
+
+    def total_for(self, category: str=None) -> float:
+        total = 0
+        for t in self._transactions_for_category(category):
+            total += t.amount
+        return total
+
+    @property
     def transactions(self):
         return sorted([
             t for t in self._transactions
@@ -52,10 +66,7 @@ class TripReport(Report):
 
     @property
     def other_transactions(self):
-        return [
-            t for t in self.transactions
-            if not t.trip_category
-        ]
+        return self._transactions_for_category(TripTransactionCategory.OTHER.name)
 
     def to_dict(self) -> dict:
         if not self.transactions:

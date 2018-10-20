@@ -55,7 +55,7 @@ td {
       <td>
         <input
           type="text"
-          name="transactions-description-{{ transaction.id }}"
+          name="transactions-id-{{ transaction.id }}-description_edited"
           form="my_form"
           placeholder="{{ transaction.description }}"
           style="width: 100%;"
@@ -76,7 +76,6 @@ td {
       <td>
         <select name="trip_transactions-transaction_id-{{ transaction.id }}" form="my_form">
           <option disabled selected value> -- select an option -- </option>
-          <option value="category-"></option>
           {% for category in trip_categories %}
             <option value="category-{{ category }}">{{ category }}</option>
           {% endfor %}

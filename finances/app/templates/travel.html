@@ -16,6 +16,21 @@
   padding: 10px;
 }
 
+.total {
+  display: inline-flex;
+  background: white;
+  margin: 10px 0;
+  padding: 5px 0;
+}
+
+.section {
+  margin: 30px 0;
+}
+
+h3 {
+  margin: 0;
+}
+
 table {
   width: 100%;
 }
@@ -24,18 +39,62 @@ table {
 {% for report in travel_reports %}
 <div class="report">
   {{ render_report_header(report) }}
-  <h3>Housing</h3>
-  {{ render_transactions(report.housing_transactions) }}
-  <h3>Food</h3>
-  {{ render_transactions(report.food_transactions) }}
-  <h3>Entertainment</h3>
-  {{ render_transactions(report.entertainment_transactions) }}
-  <h3>Travel</h3>
-  {{ render_transactions(report.travel_transactions) }}
-  <h3>Local Transportation</h3>
-  {{ render_transactions(report.local_transportation_transactions) }}
-  <h3>Other</h3>
-  {{ render_transactions(report.other_transactions) }}
+
+  <div>
+    <h3 class="total">
+      <b>Total Spent: </b>
+      <span style="color: red">{{ report.total }}</span>
+    </h3>
+  </div>
+
+  <div class="section">
+    <h3 style="background: white">
+      <span>Housing: </span>
+      <span style="color: red">{{ report.total_for('HOUSING') }}</span>
+    </h3>
+    {{ render_transactions(report.housing_transactions) }}
+  </div>
+
+  <div class="section">
+    <h3 style="background: white">
+      <span>Travel: </span>
+      <span style="color: red">{{ report.total_for('TRAVEL') }}</span>
+    </h3>
+    {{ render_transactions(report.travel_transactions) }}
+  </div>
+
+  <div class="section">
+    <h3 style="background: white">
+      <span>Local Transportation</span>
+      <span style="color: red">{{ report.total_for('LOCAL_TRANSPORTATION') }}</span>
+    </h3>
+    {{ render_transactions(report.local_transportation_transactions) }}
+  </div>
+
+  <div class="section">
+    <h3 style="background: white">
+      <span>Entertainment</span>
+      <span style="color: red">{{ report.total_for('ENTERTAINMENT') }}</span>
+    </h3>
+    {{ render_transactions(report.entertainment_transactions) }}
+  </div>
+
+  <div class="section">
+    <h3 style="background: white">
+      <span>Food</span>
+      <span style="color: red">{{ report.total_for('FOOD') }}</span>
+    </h3>
+    {{ render_transactions(report.food_transactions) }}
+  </div>
+
+  <div class="section">
+    <h3 style="background: white">
+      <span>Other</span>
+      <span style="color: red">{{ report.total_for('OTHER') }}</span>
+    </h3>
+    {{ render_transactions(report.other_transactions) }}
+  </div>
+
 </div>
 {% endfor %}
 

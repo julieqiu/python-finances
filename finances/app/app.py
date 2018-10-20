@@ -7,6 +7,7 @@ from finances.app.controllers.travel import travel_reports
 from finances.app.controllers.transactions import (
     all_transactions,
     all_trip_transactions,
+    transactions_for_term,
     transaction_classifications,
     trip_id_and_names,
     trip_transaction_category_names,
@@ -36,9 +37,10 @@ def monthly():
 
 @app.route('/travel')
 def travel():
+    trip_id = request.args.get('id')
     return render_template(
         'travel.html',
-        travel_reports=travel_reports()
+        travel_reports=travel_reports(trip_id)
     )
 
 @app.route('/tmp')
@@ -109,14 +111,13 @@ def transactions():
                     db_table = key.split('-')[0]
                     db_col = key.split('-')[1]
                     db_val = key.split('-')[2]
-
-                    if len(value.split('-')) == 2:
+                    if len(key.split('-')) == 4:
+                        # for description_edited
+                        db_col2 = key.split('-')[3]
+                        db_val2 = value
+                    elif len(value.split('-')) == 2:
                         db_col2 = value.split('-')[0]
                         db_val2 = value.split('-')[1]
-                    else:
-                        db_col2 = db_col
-                        db_col = 'id'
-                        db_val2 = value
 
                     update_table_values(
                         db_table,
@@ -131,8 +132,11 @@ def transactions():
             trip_id = int(trip_id)
 
         category = request.args.get('category')
-
         transactions = all_trip_transactions(trip_id, category)
+
+    elif 'term' in request.args.keys():
+        term = request.args.get('term')
+        transactions = transactions_for_term(term)
 
     else:
         l1 = request.args.get('l1')

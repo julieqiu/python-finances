@@ -64,7 +64,10 @@ def _db_row_values_from_csv_row(csv_row: dict, csv_col_to_db_col: dict):
         elif db_col == 'date' or db_col == 'service_date':
             db_val = str_to_date(csv_val)
         else:
-            db_val = ' '.join([s for s in csv_val.split(' ') if s])
+            try:
+                db_val = ' '.join([s for s in csv_val.split(' ') if s])
+            except Exception:
+                import pdb; pdb.set_trace()
         db_row_values[db_col] = db_val
 
     return db_row_values
@@ -151,6 +154,9 @@ def csvfiles_to_db_row_values(filenames: list,
     for hash_key, db_row_value in db_row_values_from_csvfiles.items():
         if hash_key not in existing_transactions:
             values_to_write.append(db_row_value)
+
+    if not values_to_write:
+        return values_to_write
 
     sort_key = 'date'
     if not values_to_write[0].get('date'):

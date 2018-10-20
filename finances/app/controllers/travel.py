@@ -6,12 +6,15 @@ from finances.domain.constructors import db_transaction_to_domain_transaction, d
 from finances.domain.models import TripReport, Transaction
 
 
-def travel_reports():
+def travel_reports(trip_id=None):
     trips = {}
 
     transactions = []
     with db_session() as session:
-        db_trips = session.query(DbTrip).all()
+        if not trip_id:
+            db_trips = session.query(DbTrip).all()
+        else:
+            db_trips = session.query(DbTrip).filter_by(id=trip_id).all()
         for db_trip in db_trips:
             for db_trip_transaction in db_trip.trip_transactions:
                 transactions.append(
