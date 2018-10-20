@@ -105,26 +105,24 @@ def banks():
 @app.route('/transactions', methods=['GET', 'POST'])
 def transactions():
     if request.method != 'GET':
-        with db_session() as session:
-            for key, value in request.form.items():
-                if value:
-                    db_table = key.split('-')[0]
-                    db_col = key.split('-')[1]
-                    db_val = key.split('-')[2]
-                    if len(key.split('-')) == 4:
-                        # for description_edited
-                        db_col2 = key.split('-')[3]
-                        db_val2 = value
-                    elif len(value.split('-')) == 2:
-                        db_col2 = value.split('-')[0]
-                        db_val2 = value.split('-')[1]
+        for key, value in request.form.items():
+            if value:
+                db_table = key.split('-')[0]
+                db_col = key.split('-')[1]
+                db_val = key.split('-')[2]
+                if len(key.split('-')) == 4:
+                    # for description_edited
+                    db_col2 = key.split('-')[3]
+                    db_val2 = value
+                elif len(value.split('-')) == 2:
+                    db_col2 = value.split('-')[0]
+                    db_val2 = value.split('-')[1]
 
-                    update_table_values(
-                        db_table,
-                        update_values=(db_col2, db_val2),
-                        where_values=(db_col, db_val),
-                        session=session,
-                    )
+                update_table_values(
+                    db_table,
+                    update_values=(db_col2, db_val2),
+                    where_values=(db_col, db_val),
+                )
 
     if 'trips' in request.args.keys():
         trip_id = request.args.get('id')

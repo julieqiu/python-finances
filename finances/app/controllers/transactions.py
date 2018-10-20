@@ -22,7 +22,17 @@ def all_transactions(l1: str, l2: str, l3: str):
             )
             transactions[t.id] = t
 
-    return sorted(transactions.values(), key=lambda t: t.date, reverse=True)
+    if l3:
+        transactions = [t for t in transactions.values() if t.l3 == l3.upper()]
+    elif l2:
+        transactions = [t for t in transactions.values() if t.l2 == l2.upper()]
+    elif l1:
+        transactions = [t for t in transactions.values() if t.l1 == l1.upper()]
+    else:
+        transactions = [t for t in transactions.values()]
+
+
+    return sorted(transactions, key=lambda t: t.date, reverse=True)
 
 
 def convert_for_type(val):
@@ -33,11 +43,12 @@ def convert_for_type(val):
     return val
 
 
-def update_table_values(db_table: str, update_values: tuple, where_values: tuple, session):
+def update_table_values(db_table: str, update_values: tuple, where_values: tuple):
     update_col = update_values[0]
     update_val = update_values[1]
     where_col = where_values[0]
     where_val = where_values[1]
+
 
     if update_values[1] == '':
         update_val = 'OTHER'
@@ -72,16 +83,18 @@ def update_table_values(db_table: str, update_values: tuple, where_values: tuple
                 where_val=where_val,
             )
         print(delete_statement)
-        session.execute(delete_statement)
+        with db_session() as session:
+            session.execute(delete_statement)
     else:
-        try:
-            print(insert_statement)
-            session.execute(insert_statement)
-        except Exception as err:
-            print(err)
-            session.rollback()
-            print(update_statement)
-            session.execute(update_statement)
+        with db_session() as session:
+            try:
+                print(insert_statement)
+                session.execute(insert_statement)
+            except Exception as err:
+                print(err)
+                session.rollback()
+                print(update_statement)
+                session.execute(update_statement)
 
 
 def all_trip_transactions(trip_id: int, trip_category: str):

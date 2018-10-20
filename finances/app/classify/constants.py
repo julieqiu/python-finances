@@ -59,6 +59,7 @@ CLASSIFICATION_TO_PHRASES = {
             'paypal': ['PAYPAL'],
             'venmo': ['VENMO', 'Zelle'],
         },
+
     },
 
     'SKIPPED': {
@@ -77,7 +78,7 @@ CLASSIFICATION_TO_PHRASES = {
         },
     },
 
-    'MONTHLY': {
+    'SUBSCRIPTIONS': {
         'Monthly': {
             'equinox': ['EQUINOX'],
             'laundry': ['LAUNDRY LAND'],
@@ -87,6 +88,9 @@ CLASSIFICATION_TO_PHRASES = {
                 'CLICKPAY PROPRTYPAY PPD',
             ],
             'weight_watchers': ['WEIGHTWATCHERS'],
+        },
+        'Annual': {
+            'annual': ['headspace'],
         },
     },
 }

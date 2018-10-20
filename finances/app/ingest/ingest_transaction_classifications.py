@@ -24,9 +24,19 @@ def write_to_db(tc: DbTransactionClassification):
 
 
 def ingest_transaction_classifications():
+    with db_session() as session:
+        existing_tc = set(
+            (tc.l1, tc.l2, tc.l3)
+            for tc in session.query(DbTransactionClassification).all()
+        )
+
     for l1, l1_dict in CLASSIFICATION_TO_PHRASES.items():
         for l2, l2_dict in l1_dict.items():
             for l3, phrases in l2_dict.items():
+                if (l1.upper(), l2.upper(), l3.upper()) in existing_tc:
+                    continue
+                else:
+                    import pdb; pdb.set_trace()
                 write_to_db(
                     DbTransactionClassification(
                         l1=l1.upper(),
