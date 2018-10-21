@@ -1,22 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-<style>
-td {
-  padding: 5px;
-  font-family: helvetica;
-  font-size: 14px;
-}
-
-.header {
-  background: cornflowerblue;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-</style>
 
 <form action="{{ url }}" method="POST" id="my_form"></form>
   <div style="width: 92%;">
@@ -28,8 +12,7 @@ td {
       <td class="header">Date</td>
       <td class="header">Description</td>
       <td class="header">Amount</td>
-      <td class="header">L2</td>
-      <td class="header">L3</td>
+      <td class="header">Category</td>
       <td class="header">Trip</td>
       <td class="header">Trip Category</td>
     <tr>
@@ -39,14 +22,17 @@ td {
       <td>{{ transaction.date }}</td>
       <td>{{ transaction.description }}</td>
       <td>${{ transaction.amount }}</td>
-      <td>{{ transaction.l2 }}</td>
-      <td>{{ transaction.l3 }}</td>
       {% if transaction.trip %}
+        <td></td>
         <td>{{ transaction.trip.name }}</td>
+        <td>{{ transaction.trip_category }}</td>
       {% else %}
+        <td>
+          {{ transaction.l2 }} - {{ transaction.l3 }}
+        </td>
+        <td></td>
         <td></td>
       {% endif %}
-      <td>{{ transaction.trip_category }}</td>
     </tr>
 
     <tr>
@@ -62,8 +48,8 @@ td {
         />
       </td>
       <td></td>
-      <td></td>
-      <td></td>
+      <td>
+      </td>
       <td>
         <select name="trip_transactions-transaction_id-{{ transaction.id }}" form="my_form" value="{{ transaction.trip }}">
           <option disabled selected value> -- select an option -- </option>

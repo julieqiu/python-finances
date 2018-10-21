@@ -1,0 +1,49 @@
+// Tags
+
+h1 {
+  color: green;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+h3 {
+  margin: 0;
+}
+
+p {
+  margin: 10px 0px;
+}
+
+table {
+  font-size: 18px;
+  width: 100%;
+  font-size: 18px;
+  margin: 10px 0;
+  background: white;
+}
+
+td {
+  font-family: helvetica;
+  font-size: 14px;
+  padding: 5px;
+  text-transform: uppercase;
+}
+
+form {
+  font-size: 18px;
+}
+
+input {
+  font-size: 12px;
+}
+
+button {
+    background: #1298cf;
+    -webkit-box-shadow: 0 1px 4px rgba(0,0,0,.15);
+    box-shadow: 0 1px 4px rgba(0,0,0,.15);
+    color: #fff;
+    padding: 16px 32px;
+    text-shadow: 0 1px 1px rgba(0,0,0,.25);
+}

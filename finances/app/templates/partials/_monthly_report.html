@@ -1,0 +1,20 @@
+{%- macro render_monthly_report(report) -%}
+{% from 'partials/_transactions.html' import render_transactions %}
+
+<div class="group">
+  <h2 class="l1">
+    <span>{{ report.header }}: </span>
+    <span>{{ report.data.total }}</span>
+  </h2>
+
+  {% for l2, l2_report in report.data.categories.items() %}
+      {% for l3, l3_report in l2_report.categories.items() %}
+        {% if l2.name != "Other" and l2.name != "Skipped" %}
+          <h2 class="l3">{{ l3 }}: {{ l3_report.total }} </h2>
+        {% endif %}
+        {{ render_transactions(l3_report.transactions) }}
+      {% endfor %}
+  {% endfor %}
+</div>
+
+{%- endmacro -%}

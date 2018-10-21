@@ -24,19 +24,19 @@ class TripReport(Report):
         print(self.name, ': ', total)
         return total
 
-    def total_for(self, category: str=None) -> float:
-        total = 0
-        for t in self._transactions_for_category(category):
-            total += t.amount
-        return total
-
     @property
     def transactions(self):
         return sorted([
             t for t in self._transactions
             if t.trip and t.trip.name == self.trip.name
+            and t.is_valid()
         ], key=lambda t: t.date, reverse=True)
 
+    def _total_for(self, category: str) -> float:
+        total = 0
+        for t in self._transactions_for_category(category):
+            total += t.amount
+        return total
 
     def _transactions_for_category(self, category):
         return [
@@ -44,58 +44,14 @@ class TripReport(Report):
             if t.trip_category == category
         ]
 
-    @property
-    def housing_transactions(self):
-        return self._transactions_for_category(TripTransactionCategory.HOUSING.name)
-
-    @property
-    def travel_transactions(self):
-        return self._transactions_for_category(TripTransactionCategory.TRAVEL.name)
-
-    @property
-    def food_transactions(self):
-        return self._transactions_for_category(TripTransactionCategory.FOOD.name)
-
-    @property
-    def entertainment_transactions(self):
-        return self._transactions_for_category(TripTransactionCategory.ENTERTAINMENT.name)
-
-    @property
-    def local_transportation_transactions(self):
-        return self._transactions_for_category(TripTransactionCategory.LOCAL_TRANSPORTATION.name)
-
-    @property
-    def other_transactions(self):
-        return self._transactions_for_category(TripTransactionCategory.OTHER.name)
-
-    def to_dict(self) -> dict:
-        if not self.transactions:
-            return {}
-
+    def section_for_category(self, category):
         return {
-            'total_earned': self.total_earned,
-            'total_spent': self.total_spent,
-            'total_saved': self.total_saved,
-            'reports': [
-                {
-                    'header': 'Income',
-                    'data': self.categorized_transactions.get('INCOME', {}),
-                    'color': 'green',
-                },
-                {
-                    'header': 'Monthly',
-                    'data': self.categorized_transactions.get('MONTHLY', {}),
-                    'color': 'red',
-                },
-                {
-                    'header': 'Expenses',
-                    'data': self.categorized_transactions.get('EXPENSES', {}),
-                    'color': 'red',
-                },
-                {
-                    'header': 'Skipped',
-                    'data': self.categorized_transactions.get('SKIPPED', {}),
-                    'color': 'gray',
-                },
-            ]
+            'name': ' '.join(category.split('_')).title(),
+            'total': self._total_for(category),
+            'transactions': self._transactions_for_category(category),
         }
+
+    def trip_transaction_categories(self):
+        return [
+            ttc.name for ttc in TripTransactionCategory
+        ]

@@ -1,41 +1,10 @@
-{% from 'partials/_transactions.html' import render_transactions %}
 {% from 'partials/_report_header.html' import render_report_header %}
+{% from 'partials/_travel_report.html' import render_trip_section_for_category %}
 
 {% extends "base.html" %}
 
 {% block content %}
-<style>
 
-.report {
-  width: 45%;
-  min-height: 200px;
-  background: lavender;
-  display: inline-block;
-  vertical-align: top;
-  margin: 10px;
-  padding: 10px;
-}
-
-.total {
-  display: inline-flex;
-  background: white;
-  margin: 10px 0;
-  padding: 5px 0;
-}
-
-.section {
-  margin: 30px 0;
-}
-
-h3 {
-  margin: 0;
-}
-
-table {
-  width: 100%;
-}
-
-</style>
 {% for report in travel_reports %}
 <div class="report">
   {{ render_report_header(report) }}
@@ -47,52 +16,26 @@ table {
     </h3>
   </div>
 
-  <div class="section">
-    <h3 style="background: white">
-      <span>Housing: </span>
-      <span style="color: red">{{ report.total_for('HOUSING') }}</span>
-    </h3>
-    {{ render_transactions(report.housing_transactions) }}
+  <div class="section left">
+  {% for category in ['HOUSING', 'TRAVEL', 'LOCAL_TRANSPORTATION'] %}
+    {{
+      render_trip_section_for_category(
+        report.section_for_category(category)
+      )
+    }}
+  {% endfor %}
   </div>
 
-  <div class="section">
-    <h3 style="background: white">
-      <span>Travel: </span>
-      <span style="color: red">{{ report.total_for('TRAVEL') }}</span>
-    </h3>
-    {{ render_transactions(report.travel_transactions) }}
-  </div>
-
-  <div class="section">
-    <h3 style="background: white">
-      <span>Local Transportation</span>
-      <span style="color: red">{{ report.total_for('LOCAL_TRANSPORTATION') }}</span>
-    </h3>
-    {{ render_transactions(report.local_transportation_transactions) }}
-  </div>
-
-  <div class="section">
-    <h3 style="background: white">
-      <span>Entertainment</span>
-      <span style="color: red">{{ report.total_for('ENTERTAINMENT') }}</span>
-    </h3>
-    {{ render_transactions(report.entertainment_transactions) }}
-  </div>
-
-  <div class="section">
-    <h3 style="background: white">
-      <span>Food</span>
-      <span style="color: red">{{ report.total_for('FOOD') }}</span>
-    </h3>
-    {{ render_transactions(report.food_transactions) }}
-  </div>
-
-  <div class="section">
-    <h3 style="background: white">
-      <span>Other</span>
-      <span style="color: red">{{ report.total_for('OTHER') }}</span>
-    </h3>
-    {{ render_transactions(report.other_transactions) }}
+  <div class="section right">
+  {% for category in report.trip_transaction_categories() %}
+    {% if category not in ['HOUSING', 'TRAVEL', 'LOCAL_TRANSPORTATION'] %}
+      {{
+        render_trip_section_for_category(
+          report.section_for_category(category)
+        )
+      }}
+    {% endif %}
+  {% endfor %}
   </div>
 
 </div>

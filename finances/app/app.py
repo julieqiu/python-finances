@@ -37,10 +37,22 @@ def monthly():
 
 @app.route('/travel')
 def travel():
-    trip_id = request.args.get('id')
+    trs = []
+    if 'funemployment2018' in request.query_string.decode():
+        for trip_id in sorted([5, 6, 7, 8, 9, 10, 11], reverse=True):
+            trs = trs + travel_reports(trip_id=trip_id)
+    elif 'conferences2018' in request.query_string.decode():
+        for trip_id in sorted([1, 2, 4], reverse=True):
+            trs = trs + travel_reports(trip_id=trip_id)
+    elif request.args.get('id'):
+        trip_id = request.args.get('id')
+        trs = travel_reports(trip_id=trip_id)
+    else:
+        trs = travel_reports()
+
     return render_template(
         'travel.html',
-        travel_reports=travel_reports(trip_id)
+        travel_reports=trs
     )
 
 @app.route('/tmp')

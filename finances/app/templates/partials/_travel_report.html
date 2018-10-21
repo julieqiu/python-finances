@@ -1,0 +1,16 @@
+{%- macro render_trip_section_for_category(section) -%}
+{% from 'partials/_transactions.html' import render_transactions %}
+
+<div class="trip_section">
+  <h3 style="background: white">
+    <span>{{ section.name }}: </span>
+    <span style="color: red">
+      {{ section.total }}
+    </span>
+  </h3>
+  {% if section.transactions %}
+    {{ render_transactions(section.transactions) }}
+  {% endif %}
+</div>
+
+{%- endmacro -%}

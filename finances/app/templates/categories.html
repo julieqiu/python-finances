@@ -1,70 +1,45 @@
 {% extends "base.html" %}
 
 {% block content %}
-<style>
-td {
-  padding: 5px;
-  font-size: 14px;
-}
-
-.header {
-  background: cornflowerblue;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-
-.last30 {
-  font-size: 16px;
-  font-weight: bold;
-}
-
-p {
-  margin: 10px 0px;
-}
-
-</style>
+<div>
   <div>
-    <div>
-      <a href="{{url_for("banks")}}">Banks</a>
-    </div>
-    <div  >
-      <a href="{{url_for("transactions")}}">Transations</a>
-    </div>
+    <a href="{{url_for("banks")}}">Banks</a>
   </div>
+  <div  >
+    <a href="{{url_for("transactions")}}">Transations</a>
+  </div>
+</div>
 
-  {% for category in categories %}
-    <h1>{{ category.name }}</h1>
-    <p>
-      <span class="last30" >Last 30 Days: </span>
-      <span>${{ category.total }}</span>
-    </p>
-    <p>
-      <span class="last30" >Last 60 Days: </span>
-      <span>${{ category.total }}</span>
-    </p>
-    <p>
-      <span class="last30" >Last 90 Days: </span>
-      <span>${{ category.total }}</span>
-    </p>
-    <table>
-      <tr>
-        <td class="header">Date</td>
-        <td class="header">Description</td>
-        <td class="header">Amount</td>
-        <td class="header">Type</td>
-      <tr>
-      {% for transaction in category.transactions %}
-      <tr>
-        <td>{{ transaction.date }}</td>
-        <td>{{ transaction.description }}</td>
-        <td>${{ transaction.amount }}</td>
-        <td>{{ transaction.type }}</td>
-      </tr>
-      {% endfor %}
-    </table>
-  {% endfor %}
+{% for category in categories %}
+  <h1>{{ category.name }}</h1>
+  <p>
+    <span class="last30" >Last 30 Days: </span>
+    <span>${{ category.total }}</span>
+  </p>
+  <p>
+    <span class="last30" >Last 60 Days: </span>
+    <span>${{ category.total }}</span>
+  </p>
+  <p>
+    <span class="last30" >Last 90 Days: </span>
+    <span>${{ category.total }}</span>
+  </p>
+  <table>
+    <tr>
+      <td class="header">Date</td>
+      <td class="header">Description</td>
+      <td class="header">Amount</td>
+      <td class="header">Type</td>
+    <tr>
+    {% for transaction in category.transactions %}
+    <tr>
+      <td>{{ transaction.date }}</td>
+      <td>{{ transaction.description }}</td>
+      <td>${{ transaction.amount }}</td>
+      <td>{{ transaction.type }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endfor %}
 
 {% endblock %}

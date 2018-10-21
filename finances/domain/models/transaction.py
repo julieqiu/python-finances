@@ -1,3 +1,5 @@
+import datetime
+
 from finances.app.classify.constants import CLASSIFICATION_TO_PHRASES
 
 
@@ -33,3 +35,7 @@ class Transaction:
     @property
     def year(self):
         return self.date.year
+
+    def is_valid(self):
+        return self.date >= datetime.date(2018, 6, 6)
+

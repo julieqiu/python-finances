@@ -32,7 +32,7 @@ def all_transactions(l1: str, l2: str, l3: str):
         transactions = [t for t in transactions.values()]
 
 
-    return sorted(transactions, key=lambda t: t.date, reverse=True)
+    return sorted([t for t in transactions if t.is_valid()], key=lambda t: t.date, reverse=True)
 
 
 def convert_for_type(val):
@@ -124,7 +124,7 @@ def all_trip_transactions(trip_id: int, trip_category: str):
 
 
     print('num transactions', len(transactions))
-    return sorted(transactions, key=lambda t: t.date, reverse=True)
+    return sorted([t for t in transactions if t.is_valid()], key=lambda t: t.date, reverse=True)
 
 
 def transactions_for_term(term: str):
@@ -146,7 +146,7 @@ def transactions_for_term(term: str):
                 tt.category,
             )
 
-    return transactions.values()
+    return sorted([t for t in transactions.values() if t.is_valid()], key=lambda t: t.date, reverse=True)
 
 def trip_transaction_category_names():
     return [

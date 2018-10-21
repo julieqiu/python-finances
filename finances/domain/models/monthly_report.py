@@ -22,7 +22,7 @@ class MonthlyReport(Report):
     def transactions(self) -> list:
         return sorted([
             t for t in self._transactions
-            if t.month == self.month
+            if t.month == self.month and t.is_valid()
         ], key=lambda t: t.date, reverse=True)
 
     @property

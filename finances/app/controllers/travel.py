@@ -16,14 +16,17 @@ def travel_reports(trip_id=None):
         else:
             db_trips = session.query(DbTrip).filter_by(id=trip_id).all()
         for db_trip in db_trips:
+            if db_trip.id <= 3:
+                continue
+
             for db_trip_transaction in db_trip.trip_transactions:
-                transactions.append(
-                    db_transaction_to_domain_transaction(
+                t = db_transaction_to_domain_transaction(
                         db_trip_transaction.transaction,
                         db_trip,
                         db_trip_transaction.category,
-                    )
                 )
+                if t.is_valid():
+                    transactions.append(t)
 
     for t in transactions:
         if not t.trip:
