@@ -15,7 +15,7 @@ def files_in_directory(csv_directory) -> list:
 
 def account_from_filename(filename, session) -> DbAccount:
     account_number = ''
-    for bank in ['BankOfAmerica', 'Chase']:
+    for bank in ['BankOfAmerica', 'Chase', 'PayPal']:
         if bank not in filename:
             continue
 

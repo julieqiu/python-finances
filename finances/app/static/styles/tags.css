@@ -41,7 +41,32 @@ input {
 
 button {
     background: #1298cf;
-    -webkit-box-shadow: 0 1px 4px rgba(0,0,0,.15);
+    box-shadow: 0 1px 4px rgba(0,0,0,.15);
+    color: #fff;
+    padding: 16px 32px;
+    text-shadow: 0 1px 1px rgba(0,0,0,.25);
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 700;
+    transition: all .2s ease;
+}
+
+button:active {
+    background: #1298cf;
+    color: #fff;
+    padding: 16px 32px;
+    text-shadow: 0 1px 1px rgba(0,0,0,.25);
+}
+
+button:hover {
+    background: #14a9e6;
+    box-shadow: 0 4px 10px rgba(0,0,0,.25);
+}
+
+button:focus {
+    background: #1298cf;
     box-shadow: 0 1px 4px rgba(0,0,0,.15);
     color: #fff;
     padding: 16px 32px;

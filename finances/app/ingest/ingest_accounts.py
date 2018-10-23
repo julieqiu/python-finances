@@ -12,8 +12,9 @@ ACCOUNT_INFO = [
     ('CHASE SAVINGS', 'SAVINGS', 'CHASE', 2371, None),
     ('BANK OF AMERICA SAVINGS', 'SAVINGS', 'BANK_OF_AMERICA', 1, None),
     ('BANK OF AMERICA CHECKINGS', 'CHECKINGS', 'BANK_OF_AMERICA', 2, None),
-    ('CHARLES SCHWAB', 'CHECKINGS', 'CHARLES_SCHWAB', None, None),
-    ('EMPIRE', 'INSURANCE', 'EMPIRE', None, None),
+    ('CHARLES SCHWAB', 'CHECKINGS', 'CHARLES_SCHWAB', 3, None),
+    ('EMPIRE', 'INSURANCE', 'EMPIRE', 4, None),
+    ('PAYPAL', 'PAYPAL', 'PAYPAL', 5, None),
 ]
 
 def ingest_accounts():
@@ -22,15 +23,20 @@ def ingest_accounts():
         print(name, account_type, bank, number, routing)
         try:
             with db_session() as session, split_integrity_error() as err:
-                session.execute(
-                    insert(DbAccount).values({
-                        'name': name,
-                        'type': account_type,
-                        'bank': bank,
-                        'number': number,
-                        'routing': routing,
-                    })
-                )
+                values = {
+                    'name': name,
+                    'type': account_type,
+                    'bank': bank,
+                    'number': number,
+                    'routing': routing,
+                }
+
+                upsert = insert(DbAccount).values(values).on_conflict_do_update(
+                        index_elements=['name'],
+                        set_=values
+                    )
+                session.execute(upsert)
+
         except UniqueViolation as err:
             print(err)
             continue

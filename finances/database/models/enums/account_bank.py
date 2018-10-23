@@ -7,3 +7,4 @@ class AccountBank(Enum):
     CHASE = 'chase'
     EMPIRE = 'empire'
     VANGUARD = 'vanguard'
+    PAYPAL = 'paypal'

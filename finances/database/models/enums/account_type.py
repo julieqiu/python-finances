@@ -6,3 +6,4 @@ class AccountType(Enum):
     SAVINGS = 'savings'
     CREDIT_CARD = 'credit-card'
     INSURANCE = 'insurance'
+    PAYPAL = 'paypal'

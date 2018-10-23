@@ -21,12 +21,18 @@ def _hash_key_for_db_row(db_values: dict):
     d = db_values.get('date')
     if not d:
         d = db_values.get('service_date')
+
     date_str = date_to_str(d)
 
     if db_values.get('description'):
-        return db_values['description'] + date_str + decimal.Decimal(
-            db_values['amount']
-        ).to_integral().to_eng_string()
+        try:
+            x = db_values['amount']
+            amount = decimal.Decimal(x).to_integral().to_eng_string()
+        except Exception:
+            x = float(db_values['amount'].replace(',' , ''))
+            amount = decimal.Decimal(x).to_integral().to_eng_string()
+
+        return db_values['description'] + date_str + amount
 
     return db_values['provider'] + date_str + db_values['status'] + db_values['billed']
 
@@ -102,9 +108,12 @@ def _db_row_values_for_file(filename: str,
                                 optional_cols: set,
                                 account_id: int) -> list:
     values = []
-    with open(filename, 'r') as f:
+    with open(filename, 'r', encoding='utf-8-sig') as f:
         reader = csv.DictReader(f)
         for csv_row in reader:
+            # if 'PayPal' in filename:
+            #   import pdb; pdb.set_trace()
+
             db_row_values = _db_row_values_from_csv_row(csv_row, csv_col_to_db_col)
 
             if not is_valid_db_row_values(
@@ -114,6 +123,9 @@ def _db_row_values_for_file(filename: str,
                 continue
 
             db_row_values['account_id'] = account_id
+            if ',' in db_row_values['amount']:
+                db_row_values['amount'] = float(db_row_values['amount'].replace(',' , ''))
+
             values.append(db_row_values)
 
     return values

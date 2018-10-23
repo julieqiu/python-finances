@@ -3,73 +3,76 @@
 {% block content %}
 
 <form action="{{ url }}" method="POST" id="my_form"></form>
-  <div style="width: 92%;">
-    <button type="submit" form="my_form" style="float: right;">Submit</button>
-  </div>
-  <table>
-    <tr>
-      <td class="header">Id</td>
-      <td class="header">Date</td>
-      <td class="header">Description</td>
-      <td class="header">Amount</td>
-      <td class="header">Category</td>
-      <td class="header">Trip</td>
-      <td class="header">Trip Category</td>
-    <tr>
-    {% for transaction in transactions %}
-    <tr>
-      <td>{{ transaction.id }}</td>
-      <td>{{ transaction.date }}</td>
-      <td>{{ transaction.description }}</td>
-      <td>${{ transaction.amount }}</td>
-      {% if transaction.trip %}
+  <button style="margin-bottom: 10px;float: right;" type="submit" form="my_form" style="float: right;">Submit</button>
+  <table class="table">
+    <thead>
+      <tr>
+        <th class="header">Id</th>
+        <th class="header">Date</th>
+        <th class="header">Description</th>
+        <th class="header">Amount</th>
+        <th class="header">Category</th>
+        <th class="header">Trip</th>
+        <th class="header">Trip Category</th>
+      <tr>
+    </thead>
+
+    <tbody>
+      {% for transaction in transactions %}
+      <tr>
+        <td>{{ transaction.id }}</td>
+        <td>{{ transaction.date }}</td>
+        <td>{{ transaction.description }}</td>
+        <td>${{ transaction.amount }}</td>
+        {% if transaction.trip %}
+          <td></td>
+          <td>{{ transaction.trip.name }}</td>
+          <td>{{ transaction.trip_category }}</td>
+        {% else %}
+          <td>
+            {{ transaction.l2 }} - {{ transaction.l3 }}
+          </td>
+          <td></td>
+          <td></td>
+        {% endif %}
+      </tr>
+
+      <tr>
         <td></td>
-        <td>{{ transaction.trip.name }}</td>
-        <td>{{ transaction.trip_category }}</td>
-      {% else %}
+        <td></td>
         <td>
-          {{ transaction.l2 }} - {{ transaction.l3 }}
+          <input
+            type="text"
+            name="transactions-id-{{ transaction.id }}-description_edited"
+            form="my_form"
+            placeholder="{{ transaction.description }}"
+            style="width: 100%;"
+          />
         </td>
         <td></td>
-        <td></td>
-      {% endif %}
-    </tr>
+        <td>
+        </td>
+        <td>
+          <select name="trip_transactions-transaction_id-{{ transaction.id }}" form="my_form" value="{{ transaction.trip }}">
+            <option disabled selected value> -- select an option -- </option>
+            <option value="trip_id-{{ trip_id }}"></option>
+            {% for trip_id, trip_name in trip_id_and_names  %}
+              <option value="trip_id-{{ trip_id }}">{{ trip_name }}</option>
+            {% endfor %}
+          </select>
+        </td>
+        <td>
+          <select name="trip_transactions-transaction_id-{{ transaction.id }}" form="my_form">
+            <option disabled selected value> -- select an option -- </option>
+            {% for category in trip_categories %}
+              <option value="category-{{ category }}">{{ category }}</option>
+            {% endfor %}
+          </select>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
 
-    <tr>
-      <td></td>
-      <td></td>
-      <td>
-        <input
-          type="text"
-          name="transactions-id-{{ transaction.id }}-description_edited"
-          form="my_form"
-          placeholder="{{ transaction.description }}"
-          style="width: 100%;"
-        />
-      </td>
-      <td></td>
-      <td>
-      </td>
-      <td>
-        <select name="trip_transactions-transaction_id-{{ transaction.id }}" form="my_form" value="{{ transaction.trip }}">
-          <option disabled selected value> -- select an option -- </option>
-          <option value="trip_id-{{ trip_id }}"></option>
-          {% for trip_id, trip_name in trip_id_and_names  %}
-            <option value="trip_id-{{ trip_id }}">{{ trip_name }}</option>
-          {% endfor %}
-        </select>
-      </td>
-      <td>
-        <select name="trip_transactions-transaction_id-{{ transaction.id }}" form="my_form">
-          <option disabled selected value> -- select an option -- </option>
-          {% for category in trip_categories %}
-            <option value="category-{{ category }}">{{ category }}</option>
-          {% endfor %}
-        </select>
-      </td>
-    </tr>
-    {% endfor %}
   </table>
-
 </form>
 {% endblock %}

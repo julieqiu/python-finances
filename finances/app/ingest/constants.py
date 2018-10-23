@@ -39,7 +39,7 @@ CSV_INGEST_INFO = {
             'TYPE': 'type',
         },
         'OPTIONAL_COLS': {'type'},
-        'SKIP_IF_MISSING': {'amount'},
+        'SKIP_IF_MISSING': {'amount', 'description'},
         'CSV_DIRECTORY': '{}/expenses/'.format(DIR_BASE),
     },
 }

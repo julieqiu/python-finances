@@ -9,7 +9,7 @@
 }
 
 .container {
-  margin: 20px;
+  margin: 60px 100px;
 }
 
 .group {
@@ -25,7 +25,7 @@
   min-height: 200px;
   padding: 10px;
   vertical-align: top;
-  width: 85%;
+  width: 95%;
 }
 
 .section {
