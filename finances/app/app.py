@@ -130,6 +130,7 @@ def transactions():
                     db_col2 = value.split('-')[0]
                     db_val2 = value.split('-')[1]
 
+                import pdb; pdb.set_trace()
                 update_table_values(
                     db_table,
                     update_values=(db_col2, db_val2),
@@ -160,5 +161,5 @@ def transactions():
         transactions=transactions,
         trip_categories=trip_transaction_category_names(),
         trip_id_and_names=trip_id_and_names(),
-        # transaction_classifications=transaction_classifications(),
+        transaction_classifications=transaction_classifications(),
     )

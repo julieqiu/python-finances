@@ -23,10 +23,10 @@ class Transaction:
         self.amount = amount
         self.account = account
         self.trip = trip
-        self.trip_category = trip_category.name if trip_category else None
-        self.l1 = l1
-        self.l2 = l2
-        self.l3 = l3
+        self.trip_category = trip_category.name if trip_category else ''
+        self.l1 = l1 if not trip else 'trip'
+        self.l2 = l2 if not trip else 'trip'
+        self.l3 = l3 if not trip else 'transaction'
 
     @property
     def month(self):

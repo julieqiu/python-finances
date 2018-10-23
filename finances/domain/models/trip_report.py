@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from finances.database.models.enums import TripTransactionCategory
 from . import Report
 
@@ -17,7 +19,7 @@ class TripReport(Report):
         return self.trip.name
 
     @property
-    def total(self) -> float:
+    def total_spent(self) -> float:
         total = 0
         for t in self.transactions:
             total += t.amount
@@ -31,6 +33,14 @@ class TripReport(Report):
             if t.trip and t.trip.name == self.trip.name
             and t.is_valid()
         ], key=lambda t: t.date, reverse=True)
+
+
+    def food_transactions_by_date(self):
+        date_to_trans = defaultdict(list)
+        for t in self.section_for_category('FOOD')['transactions']:
+            date_to_trans[t.date].append(t)
+        return date_to_trans
+
 
     def _total_for(self, category: str) -> float:
         total = 0

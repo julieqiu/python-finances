@@ -1,5 +1,6 @@
 {% from 'partials/_report_header.html' import render_report_header %}
 {% from 'partials/_travel_report.html' import render_trip_section_for_category %}
+{% from 'partials/_transactions.html' import render_transactions %}
 
 {% extends "base.html" %}
 
@@ -9,33 +10,66 @@
 <div class="report">
   {{ render_report_header(report) }}
 
-  <div>
-    <h3 class="total">
-      <b>Total Spent: </b>
-      <span style="color: red">{{ report.total }}</span>
-    </h3>
-  </div>
+  <div class="container">
+    <div class="col-md-6">
+    {% for category in ['HOUSING', 'TRAVEL', 'LOCAL_TRANSPORTATION'] %}
+      {% if report.section_for_category(category).transactions %}
+        {{
+          render_trip_section_for_category(
+            report.section_for_category(category)
+          )
+        }}
+      {% endif %}
+    {% endfor %}
+    </div>
 
-  <div class="section left">
-  {% for category in ['HOUSING', 'TRAVEL', 'LOCAL_TRANSPORTATION'] %}
-    {{
-      render_trip_section_for_category(
-        report.section_for_category(category)
-      )
-    }}
-  {% endfor %}
-  </div>
+    <div class="col-md-6">
+    {% for category in report.trip_transaction_categories() %}
+      {% if category not in ['HOUSING', 'TRAVEL', 'LOCAL_TRANSPORTATION', 'FOOD'] %}
+        {% if report.section_for_category(category).transactions %}
+          {{
+            render_trip_section_for_category(
+              report.section_for_category(category)
+            )
+          }}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
 
-  <div class="section right">
-  {% for category in report.trip_transaction_categories() %}
-    {% if category not in ['HOUSING', 'TRAVEL', 'LOCAL_TRANSPORTATION'] %}
-      {{
-        render_trip_section_for_category(
-          report.section_for_category(category)
-        )
-      }}
+    {% if report.food_transactions_by_date() %}
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <span>Food: </span>
+            <span style="color:red; float;right;">
+              {{ report.section_for_category('FOOD').total }}
+            </span>
+          </h3>
+        </div>
+
+        <table class="table">
+        {% for date, transactions in report.food_transactions_by_date().items() %}
+          <tr></tr>
+          <tr>
+            <td><b>{{ date }}</b></td>
+            <td></td>
+            <td></td>
+          </tr>
+            {% for t in transactions %}
+              <tr>
+                <td>{{ t.date.month }}/{{ t.date.day }}/{{ t.date.year }}</td>
+                <td>{{ t.description }}</td>
+                <td>{{ t.amount }}</td>
+              </tr>
+            {% endfor %}
+        {% endfor %}
+        </table>
+
+      </div>
+
     {% endif %}
-  {% endfor %}
+
+    </div>
   </div>
 
 </div>

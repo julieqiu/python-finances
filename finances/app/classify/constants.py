@@ -80,17 +80,15 @@ CLASSIFICATION_TO_PHRASES = {
 
     'SUBSCRIPTIONS': {
         'Monthly': {
-            'equinox': ['EQUINOX'],
-            'laundry': ['LAUNDRY LAND'],
+            'monthly': ['EQUINOX', 'LAUNDRY', 'WEIGHTWATCHERS'],
             'rent': [
                 'STUYVESANT TOWN',
                 'NOVELPAY PROPRTYPAY',
                 'CLICKPAY PROPRTYPAY PPD',
             ],
-            'weight_watchers': ['WEIGHTWATCHERS'],
         },
         'Annual': {
-            'annual': ['headspace'],
+            'annual': ['headspace', 'todoist', '8fit'],
         },
     },
 }

@@ -165,4 +165,4 @@ def trip_id_and_names():
 
 def transaction_classifications():
     with db_session() as session:
-        return [(tc.l1, tc.l2, tc.l3) for tc in session.query(DbTransactionClassification).all()]
+        return [(tc.id, tc.l1, tc.l2, tc.l3) for tc in session.query(DbTransactionClassification).all()]

@@ -1,18 +1,23 @@
 {%- macro render_report_header(report) -%}
 
-<div>
-  <div class="report-name">{{ report.name }}</div>
+<div class="jumbotron background-blue">
+  <h1 class="report-name">{{ report.name }}</h1>
     <div class="report-summary">
       <p class="report-summary">
-        <span class="blue">{{ report.start_date }}</span>
-      </p>
-      <p class="report-summary">
-        <span class="blue">to</span>
-      </p>
-      <p class="report-summary">
-        <span class="blue">{{ report.end_date }}</span>
+        <span>{{ report.start_date }}</span>
+        <span>to</span>
+        <span>{{ report.end_date }}</span>
       </p>
     </div>
+
+
+  <div>
+    <h3 class="total" style="text-align:right;">
+      <label>Total Spent: </label>
+      <label class="label label-danger">{{ report.total_spent }}</label>
+    </h3>
+  </div>
+
 </div>
 
 {%- endmacro -%}

@@ -1,0 +1,16 @@
+{%- macro render_l1_node(l1_node) -%}
+{% from 'partials/_l3_node.html' import render_l3_node %}
+
+
+{% for l2, l2_node in l1_node.children.items() %}
+  {% if l2_node.name != l1_node.name %}
+    <div class="page-header">
+    <h4>{{ l2_node.name.title() }}: {{ l2_node.total }}</h4>
+    </div>
+  {% endif %}
+  {% for l3, l3_node in l2_node.children.items() %}
+    {{ render_l3_node(l3_node) }}
+  {% endfor %}
+{% endfor %}
+
+{%- endmacro -%}

@@ -1,17 +1,33 @@
 // Colors
 
 .green {
-  color: darkgreen;
+  color: #3c763d;
 }
 
-.red {
-  color: red;
-}
-
-.gray {
-  color: gray;
+.background-green {
+  background: #dff0d8;
 }
 
 .blue {
-  color: cornflowerblue;
+  color: #337ab7;
+}
+
+.background-blue {
+  background: #d9edf7;
+}
+
+.red {
+  color: #a94442;
+}
+
+.background-red {
+  background: #f2dede;
+}
+
+.yellow {
+  color: #8a6d3b;
+}
+
+.background-yellow {
+  background: #fcf8e3;
 }

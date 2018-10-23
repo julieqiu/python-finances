@@ -3,11 +3,11 @@ from collections import defaultdict
 from finances.domain.models.report import Report
 
 
-class MonthlyReportCategory:
+class MonthlyReportNode:
 
     def __init__(self, name):
         self.name = name
-        self.categories = defaultdict(dict)
+        self.children = defaultdict(dict)
         self.transactions = []
         self.total = 0
 
@@ -26,47 +26,63 @@ class MonthlyReport(Report):
         ], key=lambda t: t.date, reverse=True)
 
     @property
-    def reports(self):
-        return [
-            {
-                'header': 'Income',
-                'data': self.categorized_transactions.get('INCOME', {}),
-                'color': 'green',
-            },
-            {
-                'header': 'Monthly',
-                'data': self.categorized_transactions.get('MONTHLY', {}),
-                'color': 'red',
-            },
-            {
-                'header': 'Expenses',
-                'data': self.categorized_transactions.get('EXPENSES', {}),
-                'color': 'red',
-            },
-            {
-                'header': 'Skipped',
-                'data': self.categorized_transactions.get('SKIPPED', {}),
-                'color': 'gray',
-            },
-        ]
+    def data(self):
+        """
+        ~~~ Structure of Dictionary ~~~
+
+        "Income": MonthlyReportNode(Income)
+            name: Income
+            total: xx
+            children:
+                "Income":
+                    name: Income
+                    total: xx
+                    children:
+                        "Income":
+                            name: Income
+                            total: xx
+                            children:
+                            transactions:
+        Skipped:
+            Skipped:
+                Skipped;
+                    list
+        Subscriptions:
+            Monthly:
+                Monthly
+                    list
+            Annual
+                Annual
+                    list
+        "Expenses":
+            Food:
+                total
+                Groceries:
+                    total
+                    list
+                Eating Out:
+                    total
+                    list
+        """
+        return self.categorized_transactions
 
     @property
-    def categorized_transactions(self) -> {}:
+    def categorized_transactions(self) -> dict:
         categorized_transactions = defaultdict(dict)
         for t in self.transactions:
             if not categorized_transactions.get(t.l1):
-                categorized_transactions[t.l1] = MonthlyReportCategory(name=t.l1)
+                categorized_transactions[t.l1] = MonthlyReportNode(name=t.l1)
 
-            if not categorized_transactions[t.l1].categories.get(t.l2):
-                categorized_transactions[t.l1].categories[t.l2] = MonthlyReportCategory(name=t.l2)
+            if not categorized_transactions[t.l1].children.get(t.l2):
+                categorized_transactions[t.l1].children[t.l2] = MonthlyReportNode(name=t.l2)
 
-            if not categorized_transactions[t.l1].categories[t.l2].categories.get(t.l3):
-                categorized_transactions[t.l1].categories[t.l2].categories[t.l3] = MonthlyReportCategory(name=t.l3)
+            if not categorized_transactions[t.l1].children[t.l2].children.get(t.l3):
+                categorized_transactions[t.l1].children[t.l2].children[t.l3] = MonthlyReportNode(name=t.l3)
 
             categorized_transactions[t.l1].total += t.amount
-            categorized_transactions[t.l1].categories[t.l2].total += t.amount
-            categorized_transactions[t.l1].categories[t.l2].categories[t.l3].total += t.amount
-            categorized_transactions[t.l1].categories[t.l2].categories[t.l3].transactions.append(t)
+            categorized_transactions[t.l1].children[t.l2].total += t.amount
+            categorized_transactions[t.l1].children[t.l2].children[t.l3].total += t.amount
+            categorized_transactions[t.l1].children[t.l2].children[t.l3].transactions.append(t)
         return categorized_transactions
 
     def total_for(self, l1: str) -> float:

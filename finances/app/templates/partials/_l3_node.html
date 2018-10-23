@@ -1,0 +1,22 @@
+{%- macro render_l3_node(l3_node) -%}
+{% from 'partials/_transactions.html' import render_transactions %}
+
+{% if l3_node.total > 0 %}
+<div class="panel panel-success">
+{% elif l3_node.total == 0 %}
+<div class="panel panel-default">
+{% else %}
+<div class="panel panel-danger">
+{% endif %}
+
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <span>{{ l3_node.name }}</span>
+      <span style="float:right;">${{ l3_node.total }}</span>
+    </h3>
+  </div>
+  {{ render_transactions(l3_node.transactions) }}
+
+</div>
+
+{%- endmacro -%}

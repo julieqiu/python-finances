@@ -10,11 +10,14 @@ from finances.database.db_errors import UniqueViolation, split_integrity_error
 from finances.database.models.db_transaction_classification import DbTransactionClassification
 
 
-def write_to_db(tc: DbTransactionClassification):
+def write_to_db(values: dict):
     try:
         with db_session() as session, split_integrity_error() as err:
-            session.add(tc)
-            session.commit()
+            upsert = insert(DbTransactionClassification).values(values).on_conflict_do_update(
+                    index_elements=['l1', 'l2', 'l3'],
+                    set_=values
+                )
+            session.execute(upsert)
     except UniqueViolation as err:
         print(err)
     except Exception as err:
@@ -33,17 +36,17 @@ def ingest_transaction_classifications():
     for l1, l1_dict in CLASSIFICATION_TO_PHRASES.items():
         for l2, l2_dict in l1_dict.items():
             for l3, phrases in l2_dict.items():
-                if (l1.upper(), l2.upper(), l3.upper()) in existing_tc:
-                    continue
-                else:
-                    import pdb; pdb.set_trace()
+                #if (l1.upper(), l2.upper(), l3.upper()) in existing_tc:
+                #    continue
+                #else:
+                #    import pdb; pdb.set_trace()
                 write_to_db(
-                    DbTransactionClassification(
+                    dict(
                         l1=l1.upper(),
                         l2=l2.upper(),
                         l3=l3.upper(),
                         phrases=sorted(
-                            list({p.lower() for p in phrases})
+                            list({str(''.join(p.split('"')).lower()) for p in phrases})
                         ),
                     )
                 )

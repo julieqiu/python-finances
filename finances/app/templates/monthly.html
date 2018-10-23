@@ -1,52 +1,48 @@
 {% from 'partials/_report_header.html' import render_report_header %}
-{% from 'partials/_monthly_report.html' import render_monthly_report %}
+{% from 'partials/_l1_node.html' import render_l1_node %}
 
 {% extends "base.html" %}
 
 {% block content %}
 
 {% for monthly_report in monthly_reports %}
-<div class="card overview">
-  {{ render_report_header(monthly_report) }}
-
-  <div class="summary">
-    <p class="summary">
-      <span>Earned: </span>
-      <span class="green">${{ monthly_report.total_earned }}</span>
-    </p>
-    <p class="summary">
-      <span>Spent: </span>
-      <span class="red">${{ monthly_report.total_spent }}</span>
-    </p>
-    <p class="summary">
-      <span>Saved: </span>
-      {% if monthly_report %}
-        {% if monthly_report.total_saved > 0 %}
-          <span class="green">${{ monthly_report.total_saved }}</span>
-        {% else %}
-          <span class="red">${{ monthly_report.total_saved }}</span>
-        {% endif %}
+<div><!-- Header + Labels -->
+  <div>
+    {{ render_report_header(monthly_report) }}
+  </div>
+  <h3 style="text-align: right;"><!-- Labels -->
+    <label>Earned: </label>
+    <label class="label label-success">${{ monthly_report.total_earned }}</label>
+    <label>Saved: </label>
+    {% if monthly_report %}
+      {% if monthly_report.total_saved > 0 %}
+        <label class="label label-success">${{ monthly_report.total_saved }}</label>
+      {% else %}
+        <label class="label label-danger">${{ monthly_report.total_saved }}</label>
       {% endif %}
-    </p>
+    {% endif %}
+  </h3><!-- Labels -->
+</div><!-- End Header + Labels -->
+
+<div class="container">
+  <div class="col-md-6">
+    {% for key in ['INCOME', 'SUBSCRIPTIONS', 'SKIPPED'] %}
+      {% if monthly_report.data.get(key) %}
+        <h2>{{ key.title() }}</h2>
+        {{ render_l1_node(monthly_report.data[key]) }}
+      {% endif %}
+    {% endfor %}
   </div>
 
-  <div class="section left">
-  {% for report in monthly_report.reports %}
-      {% if report and report.data and report.header != "Expenses" %}
-        {{ render_monthly_report(report) }}
+  <div class="col-md-6">
+    {% for key in ['EXPENSES', ''] %}
+      {% if monthly_report.data.get(key) %}
+        <h2>{{ key.title() }}</h2>
+        {{ render_l1_node(monthly_report.data[key]) }}
       {% endif %}
-  {% endfor %}
+    {% endfor %}
   </div>
-
-  <div class="section right">
-  {% for report in monthly_report.reports %}
-      {% if report and report.data and report.header == "Expenses" %}
-        {{ render_monthly_report(report) }}
-      {% endif %}
-  {% endfor %}
-  </div>
-
 </div>
-{% endfor %}
 
+{% endfor %}
 {% endblock %}
