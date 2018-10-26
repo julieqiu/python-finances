@@ -24,6 +24,7 @@ class DbTransaction(Base):
     reimbursement = Column(Boolean, nullable=True)
     account_id = Column(ForeignKey('accounts.id'), nullable=True)
     classification_id = Column(ForeignKey('transaction_classifications.id'), nullable=True)
+    user_updated_on = Column(Date, nullable=True)
 
     classification = relationship(
         DbTransactionClassification,
