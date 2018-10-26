@@ -1,90 +1,39 @@
+{% from 'partials/_transactions.html' import render_transactions %}
+
 {% extends "base.html" %}
 
 {% block content %}
-<div class="card overview">
-  <h2>Overview</h2>
-  <table>
-    <tr>
-      <td>Cash</td>
-      <td class="value green">${{ cash }}</td>
-    </tr>
-    <tr>
-      <td>Credit Debt</td>
-      <td class="value gray">${{ credit }}</td>
-    </tr>
-    <tr>
-      <td>Investments</td>
-      <td class="value green">${{ investments }}</td>
-    </tr>
-  </table>
-  </br>
-  <div class="font-size-20">
-    You spent <span class="gray">${{ spent_in_last_10_days }}</span> in the last few days.
+
+{% for bank, accounts in bank_to_accounts.items() %}
+
+<div>
+<h2>{{ bank.name }}</h2>
+
+{% for account in accounts %}
+<div class="panel panel-default">
+
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <span>{{ account.name }}</span>
+      {% if account.balance > 0 %}
+        <span style="float:right" class="green">
+      {% elif account.balance < 0 %}
+        <span style="float:right" class="red">
+      {% else %}
+        <span style="float:right">
+      {% endif %}
+          {{ account.balance }}
+        </span>
+    </h3>
   </div>
+
+  {{ render_transactions(account.transactions) }}
+
+</div>
+{% endfor %}
+
 </div>
 
-
-<div class="card transactions">
-  <table>
-    <h2>Transactions</h2>
-    <tr>
-      <td>Lyft</td>
-      <td>$9.01</td>
-    </tr>
-    <tr>
-      <td>Lyft</td>
-      <td>$6.85</td>
-    </div>
-    <tr>
-      <td>MTA</td>
-      <td>$25.50</td>
-    </tr>
-  </table>
-</div>
-
-<div class="card breakdown">
-  <h2>
-    <span>Monthly Income: </span>
-    <span class="green">${{ monthly_income }}</span>
-  </h2>
-  <table>
-    <tr>
-      <td>Spent:</td>
-      <td>${{ monthly_spent }}</td>
-    </tr>
-    <tr>
-      <td>Saved:</td>
-      <td>${{ monthly_saved }}</td>
-    </tr>
-  </table>
-</div>
-
-<div class="card breakdown">
-  <h2>August Spending</h2>
-  <table>
-    <tr>
-      <td>Lyft</td>
-      <td>$45.12</td>
-    </tr>
-    <tr>
-      <td>Food</td>
-      <td>$156.76</td>
-    </tr>
-  </table>
-</div>
-
-<div class="card category">
-  <h2>What Did I Spend On: </h2>
-  <form>
-    <input placeholder="Lyft"></input>
-    <input placeholder="This Month"></input>
-    <div>
-      <div>Total Spent</div>
-      <div>$45.12</div>
-    </div>
-    <button>Let's See</button>
-  </form>
-</div>
-
+{% endfor %}
 
 {% endblock %}

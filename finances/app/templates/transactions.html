@@ -42,7 +42,11 @@
         </td>
 
         <td>
-          <p>{{ transaction.l2 }} - {{ transaction.l3 }}</p>
+          {% if transaction.trip %}
+            <p style="color:gray; font-style:italic">{{ transaction.trip.name }}</p>
+          {% else %}
+            <p>{{ transaction.l2 }} - {{ transaction.l3 }}</p>
+          {% endif %}
 
           <select name="transactions-id-{{ transaction.id }}" form="my_form">
             <option disabled selected value> -- select an option -- </option>

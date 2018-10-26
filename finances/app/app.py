@@ -4,6 +4,7 @@ from flask import Flask, render_template, request
 
 from finances.app.controllers.monthly import monthly_reports
 from finances.app.controllers.travel import travel_reports
+from finances.app.controllers.accounts import all_accounts
 from finances.app.controllers.transactions import (
     all_transactions,
     all_trip_transactions,
@@ -21,12 +22,18 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/index')
 def index():
-    now = datetime.datetime.now()
     return render_template(
-        'monthly.html',
-        monthly_reports=monthly_reports(only_month=now.month)
+        'index.html',
+        bank_to_accounts=all_accounts()
     )
 
+@app.route('/accounts/<account_id>')
+def accounts(account_id):
+
+    return render_template(
+        'index.html',
+        bank_to_accounts=all_accounts(account_id)
+    )
 
 @app.route('/monthly')
 def monthly():
@@ -113,7 +120,6 @@ def banks():
         banks=banks
     )
 
-
 @app.route('/transactions', methods=['GET', 'POST'])
 def transactions():
     if request.method != 'GET':
@@ -130,7 +136,6 @@ def transactions():
                     db_col2 = value.split('-')[0]
                     db_val2 = value.split('-')[1]
 
-                import pdb; pdb.set_trace()
                 update_table_values(
                     db_table,
                     update_values=(db_col2, db_val2),
@@ -144,6 +149,10 @@ def transactions():
 
         category = request.args.get('category')
         transactions = all_trip_transactions(trip_id, category)
+
+    elif 'amount' in request.args.keys():
+        term = request.args.get('term')
+        transactions = transactions_for_amount(amount)
 
     elif 'term' in request.args.keys():
         term = request.args.get('term')

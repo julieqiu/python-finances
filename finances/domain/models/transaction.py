@@ -10,7 +10,7 @@ class Transaction:
                  date,
                  description,
                  amount,
-                 account,
+                 account_id,
                  trip,
                  trip_category,
                  l1,
@@ -21,7 +21,7 @@ class Transaction:
         self.date = date
         self.description = description
         self.amount = amount
-        self.account = account
+        self.account_id = account_id
         self.trip = trip
         self.trip_category = trip_category.name if trip_category else ''
         self.l1 = l1 if not trip else 'trip'

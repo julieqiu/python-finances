@@ -1,5 +1,5 @@
-from finances.database.models import DbTransaction, DbTrip
-from finances.domain.models import Transaction, Trip
+from finances.database.models import DbAccount, DbTransaction, DbTrip
+from finances.domain.models import Account, Transaction, Trip
 
 
 def db_transaction_to_domain_transaction(db_transaction: DbTransaction,
@@ -18,7 +18,7 @@ def db_transaction_to_domain_transaction(db_transaction: DbTransaction,
         date=db_transaction.date,
         description=description,
         amount=db_transaction.amount,
-        account=db_transaction.account_id,
+        account_id=db_transaction.account_id,
         trip=domain_trip,
         trip_category=trip_category,
         l1=db_transaction.l1,
@@ -33,4 +33,15 @@ def db_trip_to_domain_trip(db_trip: DbTrip):
         name=db_trip.name,
         start_date=db_trip.start_date,
         end_date=db_trip.end_date,
+    )
+
+
+def db_account_to_domain_account(db_account: DbAccount):
+    return Account(
+        id=db_account.id,
+        name=db_account.name,
+        account_type=db_account.type,
+        bank=db_account.bank,
+        number=db_account.number,
+        routing=db_account.routing,
     )

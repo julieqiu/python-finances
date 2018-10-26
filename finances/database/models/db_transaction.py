@@ -31,7 +31,6 @@ class DbTransaction(Base):
         backref='transaction_classifications'
     )
 
-
     @property
     def l1(self) -> str:
         if self.classification:

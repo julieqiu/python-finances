@@ -1,12 +1,13 @@
 // Colors
 
+.background-green {
+  background: #dff0d8;
+}
+
 .green {
   color: #3c763d;
 }
 
-.background-green {
-  background: #dff0d8;
-}
 
 .blue {
   color: #337ab7;

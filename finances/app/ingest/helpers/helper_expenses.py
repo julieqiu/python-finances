@@ -27,10 +27,10 @@ def _hash_key_for_db_row(db_values: dict):
     if db_values.get('description'):
         try:
             x = db_values['amount']
-            amount = decimal.Decimal(x).to_integral().to_eng_string()
+            amount = str(float(decimal.Decimal(x)))
         except Exception:
             x = float(db_values['amount'].replace(',' , ''))
-            amount = decimal.Decimal(x).to_integral().to_eng_string()
+            amount = str(float(decimal.Decimal(x)))
 
         return db_values['description'] + date_str + amount
 
@@ -148,6 +148,7 @@ def csvfiles_to_db_row_values(filenames: list,
 
     # 2) Hash all CSV rows + mark "duplicates" we want to keep; add to seen
     db_row_values_from_csvfiles = dict()
+
     for filename in sorted(filenames):  # NOTE: Assuming this sorts files by date.
         db_row_values = _db_row_values_for_file(
             filename,

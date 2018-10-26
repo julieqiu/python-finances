@@ -1,3 +1,4 @@
+from .account import Account
 from .monthly_report import MonthlyReport
 from .report import Report
 from .transaction import Transaction
