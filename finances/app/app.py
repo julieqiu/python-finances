@@ -22,10 +22,8 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template(
-        'index.html',
-        bank_to_accounts=all_accounts()
-    )
+    return "Hello"
+
 
 @app.route('/accounts/<account_id>')
 def accounts(account_id):
