@@ -4,6 +4,7 @@
 
 <thead class="background-lavender">
   <tr class="uppercase">
+    <th>ID</th>
     <th>Date</th>
     <th>Description</th>
     <th>Amount</th>
@@ -13,6 +14,7 @@
 <tbody>
 {% for t in transactions %}
   <tr>
+    <td>{{ t.id }}</td>
     <td>{{ t.date.month }}/{{ t.date.day }}/{{ t.date.year }}</td>
     <td>{{ t.description }}</td>
     <td>{{ t.amount }}</td>

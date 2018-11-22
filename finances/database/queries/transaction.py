@@ -20,9 +20,9 @@ def get_transactions(
 
     transactions = session.query(DbTransaction)
     for j in joins:
-        transactions = transactions.join(j)
+        transactions = transactions.join(*j)
 
-    yield from transactions.filter(*filters).order_by(DbTransaction.id)
+    return transactions.filter(*filters).order_by(DbTransaction.id).all()
 
 
 def get_max_transaction_id(session):
