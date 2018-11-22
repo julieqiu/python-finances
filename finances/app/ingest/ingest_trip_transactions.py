@@ -88,7 +88,7 @@ def ingest_trip_transactions():
         print(len(trip_transaction_ids))
         domain_transactions = []
         for trip in session.query(DbTrip).all():
-            for t in session.query(DbTransaction).all():
+            for t in session.query(DbTransaction).filter_by(id>1074):
                 if t.id in trip_transaction_ids:
                     print('Skipping - already in table and categorized')
                     continue
@@ -108,6 +108,9 @@ def ingest_trip_transactions():
             transaction_id=domain_trans.id,
             category=category,
         )
+
+    print('Make sure to update the max id in this script to the latest max id in transactions')
+    print('SELECT MAX(id) FROM transactions;')
 
 
 if __name__ == '__main__':

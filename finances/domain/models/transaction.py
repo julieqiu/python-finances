@@ -24,9 +24,32 @@ class Transaction:
         self.account_id = account_id
         self.trip = trip
         self.trip_category = trip_category.name if trip_category else ''
-        self.l1 = l1 if not trip else 'trip'
-        self.l2 = l2 if not trip else 'trip'
-        self.l3 = l3 if not trip else 'transaction'
+        self._l1 = l1
+        self._l2 = l2
+        self._l3 = l3
+
+    @property
+    def l1(self):
+        if self.trip or not self._l1:
+            return 'EXPENSES'
+        return self._l1
+
+    @property
+    def l2(self):
+        if self.trip:
+            return 'TRIP'
+        if not self._l2:
+            return 'OTHER'
+        return self._l2
+
+    @property
+    def l3(self):
+        if self.trip:
+            return self.trip.name
+        if not self._l3:
+            return 'OTHER'
+        return self._l3
+
 
     @property
     def month(self):
@@ -38,4 +61,3 @@ class Transaction:
 
     def is_valid(self):
         return self.date >= datetime.date(2018, 6, 6)
-

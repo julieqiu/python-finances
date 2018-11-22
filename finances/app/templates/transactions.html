@@ -2,8 +2,20 @@
 
 {% block content %}
 
+<div>
+<form action="{{ url }}" method="GET" id="search_form">
+  <div class="input-group mb-3 col-md-12" style="margin-bottom: 40px;">
+    <input style="width: 90%;" type="text" class="form-control" placeholder="Search">
+    <div class="input-group-append">
+      <button class="btn btn-outline-secondary" type="submit" form="search_form" style="float: right;">Search</button>
+    </div>
+  </div>
+</form>
+
 <form action="{{ url }}" method="POST" id="my_form"></form>
-  <button class="btn btn-lg btn-primary" style="margin-bottom: 10px;float: right;" type="submit" form="my_form" style="float: right;">Submit</button>
+
+  <button class="btn btn-primary" style="margin-bottom: 10px;float: right;" type="submit" form="my_form" style="float: right;">Submit</button>
+
   <table class="table">
     <thead class="background-lavender">
       <tr class="uppercase">
@@ -93,4 +105,6 @@
 
   </table>
 </form>
+
+</div>
 {% endblock %}

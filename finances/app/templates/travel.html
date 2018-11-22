@@ -23,7 +23,7 @@
     {% endfor %}
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-5">
     {% for category in report.trip_transaction_categories() %}
       {% if category not in ['HOUSING', 'TRAVEL', 'LOCAL_TRANSPORTATION', 'FOOD'] %}
         {% if report.section_for_category(category).transactions %}
@@ -51,13 +51,12 @@
         {% for date, transactions in report.food_transactions_by_date().items() %}
           <tr></tr>
           <tr>
-            <td><b>{{ date }}</b></td>
+            <td><b>{{ date.month }}/{{ date.day }}/{{ date.year }}</b></td>
             <td></td>
             <td></td>
           </tr>
             {% for t in transactions %}
               <tr>
-                <td>{{ t.date.month }}/{{ t.date.day }}/{{ t.date.year }}</td>
                 <td>{{ t.description }}</td>
                 <td>{{ t.amount }}</td>
               </tr>

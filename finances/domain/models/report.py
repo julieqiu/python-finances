@@ -22,6 +22,10 @@ class Report:
         return self.start_date.month
 
     @property
+    def year(self) -> int:
+        return self.start_date.year
+
+    @property
     def month_name(self) -> str:
         return {
             1: 'January',

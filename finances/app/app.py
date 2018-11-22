@@ -5,6 +5,10 @@ from flask import Flask, render_template, request
 from finances.app.controllers.monthly import monthly_reports
 from finances.app.controllers.travel import travel_reports
 from finances.app.controllers.accounts import all_accounts
+from finances.app.controllers.insurance import (
+    insurance_report,
+)
+
 from finances.app.controllers.transactions import (
     all_transactions,
     all_trip_transactions,
@@ -22,7 +26,10 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/index')
 def index():
-    return "Hello"
+    return render_template(
+        'index.html',
+        bank_to_accounts=all_accounts()
+    )
 
 
 @app.route('/accounts/<account_id>')
@@ -118,9 +125,23 @@ def banks():
         banks=banks
     )
 
+@app.route('/insurance')
+def insurance():
+    if 'provider' in request.args.keys():
+        provider = request.args.get('provider')
+        report = insurance_report(provider=provider)
+    else:
+        report = insurance_report()
+
+    return render_template(
+        'insurance.html',
+        insurance_report=report
+    )
+
+
 @app.route('/transactions', methods=['GET', 'POST'])
 def transactions():
-    if request.method != 'GET':
+    if request.method == 'POST':
         for key, value in request.form.items():
             if value:
                 db_table = key.split('-')[0]
@@ -148,6 +169,11 @@ def transactions():
         category = request.args.get('category')
         transactions = all_trip_transactions(trip_id, category)
 
+    elif 'month' in request.args.keys():
+        month = int(request.args.get('month'))
+        year = int(request.args.get('year', 2018))
+        transactions = all_transactions(month=month, year=year)
+
     elif 'amount' in request.args.keys():
         term = request.args.get('term')
         transactions = transactions_for_amount(amount)
@@ -160,7 +186,12 @@ def transactions():
         l1 = request.args.get('l1')
         l2 = request.args.get('l2')
         l3 = request.args.get('l3')
-        transactions = all_transactions(l1, l2, l3)
+        transactions = all_transactions(l1=l1, l2=l2, l3=l3)
+
+    if 'classify' in request.args.keys():
+        transactions = [
+            t for t in transactions if not t.l1 and not t.trip_category
+        ]
 
     return render_template(
         'transactions.html',

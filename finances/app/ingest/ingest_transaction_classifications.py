@@ -36,20 +36,20 @@ def ingest_transaction_classifications():
     for l1, l1_dict in CLASSIFICATION_TO_PHRASES.items():
         for l2, l2_dict in l1_dict.items():
             for l3, phrases in l2_dict.items():
-                #if (l1.upper(), l2.upper(), l3.upper()) in existing_tc:
-                #    continue
-                #else:
-                #    import pdb; pdb.set_trace()
-                write_to_db(
-                    dict(
-                        l1=l1.upper(),
-                        l2=l2.upper(),
-                        l3=l3.upper(),
-                        phrases=sorted(
-                            list({str(''.join(p.split('"')).lower()) for p in phrases})
-                        ),
+                if (l1.upper(), l2.upper(), l3.upper()) in existing_tc:
+                    continue
+                else:
+                    print('Inserting: ', l1.upper(), l2.upper(), l3.upper())
+                    write_to_db(
+                        dict(
+                            l1=l1.upper(),
+                            l2=l2.upper(),
+                            l3=l3.upper(),
+                            phrases=sorted(
+                                list({str(''.join(p.split('"')).lower()) for p in phrases})
+                            ),
+                        )
                     )
-                )
 
 
 if __name__ == '__main__':

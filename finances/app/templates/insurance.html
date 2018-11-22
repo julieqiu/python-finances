@@ -1,0 +1,111 @@
+{% from 'partials/_transactions.html' import render_transactions %}
+
+{% extends "base.html" %}
+
+{% block content %}
+
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <span>Insurance Claims</span>
+          <span style="float:right;">$</span>
+        </h3>
+      </div>
+
+    <div class="col-md-6 insurance_dollars">
+      <p>
+        <b>Billed</b>
+        <label class="label label-default">${{ insurance_report.total_for('billed') }}</label>
+      </p>
+      <p>
+        <b>Paid</b>
+        <label class="label label-success">${{ insurance_report.total_for('paid') }}</label>
+      </p>
+      <p>
+        <b>Deductible</b>
+        <label class="label label-success">${{ insurance_report.total_for('deductible') }}</label>
+      </p>
+    </div>
+
+    <div class="col-md-6 insurance_dollars">
+      <p>
+        <b>Coinsurance</b>
+        <label class="label label-success">${{ insurance_report.total_for('coinsurance') }}</label>
+      </p>
+      <p>
+        <b>Not Covered</b>
+        <label class="label label-success">${{ insurance_report.total_for('not_covered') }}</label>
+      </p>
+      <p>
+        <b>Your Cost</b>
+        <label class="label label-danger">${{ insurance_report.total_for('personal_cost') }}</label>
+      </p>
+    </div>
+
+
+    <table class="table">
+
+    <thead class="background-lavender">
+      <tr class="uppercase">
+        <th>Date</th>
+        <th>Provider</th>
+        <th>Billed</th>
+        <th>Paid</th>
+        <th>Deductible</th>
+        <th>Coinsurance</th>
+        <th>Not Covered</th>
+        <th>Your Cost</th>
+      </tr>
+    </thead>
+
+    <tbody>
+    {% for ic in insurance_report.insurance_claims %}
+      <tr>
+        <td>{{ ic.date.month }}/{{ ic.date.day }}/{{ ic.date.year }}</td>
+        <td>{{ ic.provider }}</td>
+        <td>{{ ic.billed if ic.billed }}</td>
+        <td>{{ ic.paid if ic.paid }}</td>
+        <td>{{ ic.deductible if ic.deductible }}</td>
+        <td>{{ ic.coinsurance if ic.coinsurance }}</td>
+        <td>{{ ic.not_covered if ic.not_covered }}</td>
+        <td>{{ ic.personal_cost if ic.personal_cost }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+
+    </table>
+
+    </div>
+
+
+<div >
+  <div class="col-md-6">
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <span>Payments</span>
+          <span style="float:right;">${{ insurance_report.total_for('payments') }}</span>
+        </h3>
+      </div>
+      {{ render_transactions(insurance_report.payments) }}
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <span>Reimbursements</span>
+          <span style="float:right;">${{ insurance_report.total_for('reimbursements') }}</span>
+        </h3>
+      </div>
+      {{ render_transactions(insurance_report.reimbursements) }}
+    </div>
+
+  </div>
+</div>
+
+
+{% endblock %}

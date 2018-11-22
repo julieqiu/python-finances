@@ -19,31 +19,18 @@ TABLES = [
 
 
 def main():
-    # with db_session() as session:
-    #     print('TRUNCATING {}'.format(', '.join(t for t in TABLES)))
-    #     session.execute('TRUNCATE {};'.format(', '.join(t for t in TABLES)))
-    #     for t in TABLES:
-    #         session.execute(
-    #             'ALTER SEQUENCE {}_id_seq RESTART WITH 1;'.format(t)
-    #         )
+    with db_session() as session:
+        for t in TABLES:
+            result = session.execute('SELECT MAX(id) FROM {};'.format(t)).first()
+            if not result[0]:
+                max_id = 1
+            else:
+                max_id = result[0] + 1
+            session.execute(
+                'ALTER SEQUENCE {}_id_seq RESTART WITH {};'.format(t, max_id)
+            )
+            print('SET max_id of {} to {}'.format(t, max_id))
 
-    ingest_accounts()
-    print()
-
-    ingest_trips()
-    print()
-
-    ingest_transaction_classifications()
-    print()
-
-    ingest_transactions()
-    print()
-
-    ingest_trip_transactions()
-    print()
-
-    ingest_insurance_claims()
-    print()
 
 
 if __name__ == '__main__':

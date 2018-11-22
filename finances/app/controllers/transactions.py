@@ -1,19 +1,27 @@
-from sqlalchemy import update
+from sqlalchemy import update, or_
 
 from finances.database.models import DbTransaction, DbTrip, DbTripTransaction, DbTransactionClassification
 from finances.database.models.enums import TripTransactionCategory
+from finances.database.queries.transaction import get_transactions
 from finances.database import db_session
 from finances.domain.constructors import db_transaction_to_domain_transaction, db_trip_to_domain_trip
 
 
-def all_transactions(l1: str, l2: str, l3: str):
+def all_transactions(l1: str=None, l2: str=None, l3: str=None, month: int=None, year: int=2018):
     transactions = {}
     with db_session() as session:
-        db_transactions = session.query(DbTransaction).all()
+        db_transactions = get_transactions(
+            session=session,
+            joins=[DbTripTransaction, DbTransactionClassification],
+            filters=[DbTransactionClassification.l1 != 'SKIPPED'],
+        )
         for t in db_transactions:
-            if t.l1 == 'SKIPPED':
-                continue
             transactions[t.id] = db_transaction_to_domain_transaction(t)
+
+        # for t in db_transactions:
+        #     if t.l1 == 'SKIPPED':
+        #         continue
+        #    transactions[t.id] = db_transaction_to_domain_transaction(t)
 
         db_trip_transactions = session.query(DbTripTransaction).all()
         for db_tt in db_trip_transactions:
@@ -21,6 +29,12 @@ def all_transactions(l1: str, l2: str, l3: str):
                 db_tt.transaction, db_tt.trip, db_tt.category
             )
             transactions[t.id] = t
+
+    if month:
+        transactions = {
+                k:v for k, v in transactions.items()
+                if v.date.month == month and v.date.year == year
+        }
 
     if l3:
         transactions = [t for t in transactions.values() if t.l3 == l3.upper()]
@@ -31,8 +45,7 @@ def all_transactions(l1: str, l2: str, l3: str):
     else:
         transactions = [t for t in transactions.values()]
 
-
-    return sorted([t for t in transactions if t.is_valid()], key=lambda t: t.date, reverse=True)
+    return sorted([t for t in transactions], key=lambda t: t.date, reverse=True)
 
 
 def convert_for_type(val):
@@ -130,23 +143,27 @@ def all_trip_transactions(trip_id: int, trip_category: str):
 def transactions_for_term(term: str):
     transactions = {}
     with db_session() as session:
-        db_transactions = session.query(DbTransaction).filter(
-            DbTransaction.description.ilike('%{}%'.format(term))
+        db_transactions = get_transactions(
+            session=session,
+            joins=[
+                DbTripTransaction,
+            ],
+            filters=[
+                or_(
+                    and_(
+                        DbTransaction.description.ilike('%{}%'.format(term)),
+                        DbTransaction.description_edited is None
+                    ),
+                    DbTransaction.description_edited.ilike('%{}%'.format(term)),
+                )
+            ]
         )
-        db_trip_transactions = session.query(DbTripTransaction).filter(
-            DbTripTransaction.transaction_id.in_([t.id for t in db_transactions])
-        )
-
         for t in db_transactions:
-            transactions[t.id] = db_transaction_to_domain_transaction(t)
-        for tt in db_trip_transactions:
-            transactions[tt.transaction_id] = db_transaction_to_domain_transaction(
-                tt.transaction,
-                tt.trip,
-                tt.category,
-            )
+            transactions[t.id] = db_transaction_to_domain_transaction(t, t.trip, t.category)
 
     return sorted([t for t in transactions.values() if t.is_valid()], key=lambda t: t.date, reverse=True)
+
+
 
 def trip_transaction_category_names():
     return [

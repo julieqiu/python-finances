@@ -17,6 +17,7 @@
     <!-- My Styles -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/colors.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/fonts.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/insurance.css') }}">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -52,6 +53,9 @@
             </li>
             <li>
               <a href="{{ url_for('transactions') }}">Transactions</a>
+            </li>
+            <li>
+              <a href="{{ url_for('insurance') }}">Insurance</a>
             </li>
           </ul>
         </div><!--/.nav-collapse -->

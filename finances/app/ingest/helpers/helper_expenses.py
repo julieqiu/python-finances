@@ -73,6 +73,7 @@ def _db_row_values_from_csv_row(csv_row: dict, csv_col_to_db_col: dict):
             try:
                 db_val = ' '.join([s for s in csv_val.split(' ') if s])
             except Exception:
+                print(csv_row)
                 import pdb; pdb.set_trace()
         db_row_values[db_col] = db_val
 
@@ -123,8 +124,9 @@ def _db_row_values_for_file(filename: str,
                 continue
 
             db_row_values['account_id'] = account_id
-            if ',' in db_row_values['amount']:
-                db_row_values['amount'] = float(db_row_values['amount'].replace(',' , ''))
+            if db_row_values.get('amount'):
+                if ',' in db_row_values['amount']:
+                    db_row_values['amount'] = float(db_row_values['amount'].replace(',' , ''))
 
             values.append(db_row_values)
 

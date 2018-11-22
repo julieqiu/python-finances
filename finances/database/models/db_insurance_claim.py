@@ -11,7 +11,7 @@ class DbInsuranceClaim(Base):
     id = Column(Integer, primary_key=True)
     service_date = Column(Date, nullable=False)
     type = Column(String, nullable=True)
-    claim_number = Column(String, nullable=True)
+    claim_id = Column(String, nullable=True)
     patient = Column(String, nullable=True)
     provider = Column(String, nullable=False)
     billed = Column(Numeric, default=0)

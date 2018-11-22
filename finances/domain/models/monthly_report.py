@@ -100,7 +100,7 @@ class MonthlyReport(Report):
 
     @property
     def total_fixed(self):
-        return self.total_for('MONTHLY')
+        return self.total_for('SUBSCRIPTIONS')
 
     @property
     def total_variable(self):

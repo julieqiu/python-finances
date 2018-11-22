@@ -18,25 +18,22 @@ TRAVEL_INFO = [
     ('10/1/2018', '10/10/2018', 'SPAIN' ),
     ('10/10/2018', '10/23/2018', 'ITALY + GREECE' ),
     ('11/16/2018', '11/18/2018', "HANNAH'S GRADUATION" ),
+    ('12/23/2018', '01/06/2019', 'DUBLIN - CHRISTMAS + NYE 2018'),
+
+    ('01/18/2019', '01/21/2019', 'LISBON'),
 ]
 
 
 def ingest_trips():
     print('~~~ Adding TRIPS to DB ~~~')
     for start_date, end_date, name in TRAVEL_INFO:
-        print(start_date, end_date, name)
-
-        try:
-            with db_session() as session, split_integrity_error() as err:
+        with db_session() as session:
+            trips = set(t.name for t in session.query(DbTrip).all())
+            if name not in trips:
+                print(start_date, end_date, name)
                 session.execute(
                     insert(DbTrip).values({'name': name, 'start_date': start_date, 'end_date': end_date})
                 )
-        except UniqueViolation as err:
-            print(err)
-            continue
-        except Exception as err:
-            print(err)
-            raise err
 
 
 if __name__ == '__main__':

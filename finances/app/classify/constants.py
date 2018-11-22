@@ -34,6 +34,7 @@ CLASSIFICATION_TO_PHRASES = {
         'Health': {
             'health': ['MOUNT SINAI'],
             'physical_therapy': ['RECOVERY PHYSICAL THERAPY'],
+            'therapy': [],
         },
 
         'Shopping': {
@@ -71,11 +72,15 @@ CLASSIFICATION_TO_PHRASES = {
     'INCOME': {
         'Income': {
             'bonus': ['IRS TREAS', '$150 for New Savings', '$200 for New Checking'],
-            'checks': ['REMOTE ONLINE DEPOSIT', 'ATM CHECK DEPOSIT', 'DEPOSIT *MOBILE NY'],
-            'income': ['SPRING NYC', 'SHOPSPRING', 'JELLO LABS DES:DIR DEP ID'],
+            'checks': ['ATM CHECK DEPOSIT', 'DEPOSIT *MOBILE NY'],
+            'income': ['GOOGLE', 'SPRING NYC', 'SHOPSPRING', 'JELLO LABS DES:DIR DEP ID'],
             'reimbursed': ['Expensify', 'ELASTICSEARCH JAN3'],
             'interest': ['INTEREST'],
         },
+        'Health': {
+            'reimbursements': ['REMOTE ONLINE DEPOSIT'],
+        },
+
     },
 
     'SUBSCRIPTIONS': {
@@ -88,7 +93,7 @@ CLASSIFICATION_TO_PHRASES = {
             ],
         },
         'Annual': {
-            'annual': ['headspace', 'todoist', '8fit'],
+            'annual': ['headspace', 'todoist', '8fit', 'ANNUAL MEMBERSHIP FEE'],
         },
     },
 }
