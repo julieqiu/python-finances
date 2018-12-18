@@ -26,8 +26,8 @@ TRANSACTIONS_CSV_INGEST_INFO = CSV_INGEST_INFO['TRANSACTIONS']
 
 
 def classify_transaction(transaction_values: dict, transaction_classifications: list):
-    if 'VENMO PAYMENT' in transaction_values['description'].upper() and transaction_values['amount'] >= 175:
-        transaction_values['classification_id'] = tc.id
+    if 'VENMO PAYMENT' in transaction_values['description'].upper() and float(transaction_values['amount']) >= 175:
+        transaction_values['classification_id'] = 26  # Classification Id for Therapy
 
     for tc in transaction_classifications:
         for phrase in tc.phrases:

@@ -54,7 +54,7 @@ class InsuranceReport(Report):
             and ic.personal_cost > 0
             and 'not available' not in ic.provider
             and ic.status == 'Approved'
-        ], key=lambda t: t.date, reverse=True)
+        ], key=lambda ic: (ic.provider, ic.date), reverse=True)
 
     @property
     def transactions(self) -> list:
