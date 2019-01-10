@@ -1,6 +1,6 @@
 # FOOD
 def phrases_list(filename: str) -> list:
-    with open('/Users/julie/Code/finances/finances/app/classify/filters/' + filename, 'r') as f:
+    with open('/Users/julie/Code/github.com/finances/finances/app/classify/filters/' + filename, 'r') as f:
         words = f.readlines()
         return [
             word[:-1] if word[-1] == '\n' else word

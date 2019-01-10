@@ -1,4 +1,5 @@
 from .account import Account
+from .annual_report import AnnualReport
 from .insurance_claim import InsuranceClaim
 from .insurance_report import InsuranceReport
 from .monthly_report import MonthlyReport

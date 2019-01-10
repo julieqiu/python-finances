@@ -1,0 +1,45 @@
+{% from 'partials/_report_header.html' import render_report_header %}
+{% from 'partials/_l3_node.html' import render_l3_node %}
+
+{% extends "base.html" %}
+
+{% block content %}
+<div><!-- Header + Labels -->
+  <div>
+    {{ render_report_header(annual_report) }}
+  </div>
+  <h3 style="text-align: right;"><!-- Labels -->
+    <label>Earned: </label>
+    <label class="label label-success">${{ annual_report.total_earned }}</label>
+    <label>Saved: </label>
+    {% if annual_report.total_saved > 0 %}
+      <label class="label label-success">${{ annual_report.total_saved }}</label>
+    {% else %}
+      <label class="label label-danger">${{ annual_report.total_saved }}</label>
+    {% endif %}
+  </h3><!-- Labels -->
+</div><!-- End Header + Labels -->
+
+<div class="container">
+  <div class="col-md-12">
+    {% for key in ['INCOME', 'SUBSCRIPTIONS', 'SKIPPED', 'EXPENSES', ''] %}
+      {% if annual_report.data.get(key) %}
+        <h2>{{ key.title() }}</h2>
+
+        {% for l2, l2_node in annual_report.data[key].children.items() %}
+          {% if l2_node.name != annual_report.data[key].name %}
+            <div class="page-header">
+            <h4>{{ l2_node.name.title() }}: {{ l2_node.total }}</h4>
+            </div>
+          {% endif %}
+          {% for l3, l3_node in l2_node.children.items() %}
+            {{ render_l3_node(l3_node) }}
+          {% endfor %}
+        {% endfor %}
+
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

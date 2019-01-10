@@ -2,6 +2,7 @@ import datetime
 
 from flask import Flask, render_template, request
 
+from finances.app.controllers.annual import annual_report
 from finances.app.controllers.monthly import monthly_reports
 from finances.app.controllers.travel import travel_reports
 from finances.app.controllers.accounts import all_accounts
@@ -45,6 +46,13 @@ def monthly():
     return render_template(
         'monthly.html',
         monthly_reports=monthly_reports()
+    )
+
+@app.route('/annual')
+def annual():
+    return render_template(
+        'annual.html',
+        annual_report=annual_report()
     )
 
 @app.route('/travel')

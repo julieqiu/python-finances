@@ -6,6 +6,7 @@ from finances.database.models import DbTrip, DbTransaction, DbTripTransaction
 from finances.database.models.enums import TripTransactionCategory
 from finances.domain.constructors import db_transaction_to_domain_transaction
 
+MAX_ID = 1232
 
 CATEGORY_TO_PHRASES = {
     TripTransactionCategory.ENTERTAINMENT: ['TOURS'],
@@ -88,7 +89,7 @@ def ingest_trip_transactions():
         print(len(trip_transaction_ids))
         domain_transactions = []
         for trip in session.query(DbTrip).all():
-            for t in session.query(DbTransaction).filter_by(id>1074):
+            for t in session.query(DbTransaction).filter(DbTransaction.id > MAX_ID):
                 if t.id in trip_transaction_ids:
                     print('Skipping - already in table and categorized')
                     continue
