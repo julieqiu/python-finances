@@ -163,6 +163,7 @@ def transactions():
                     db_col2 = value.split('-')[0]
                     db_val2 = value.split('-')[1]
 
+                # TODO: send description over the wire and write to disk
                 update_table_values(
                     db_table,
                     update_values=(db_col2, db_val2),
@@ -198,7 +199,7 @@ def transactions():
 
     if 'classify' in request.args.keys():
         transactions = [
-            t for t in transactions if not t.l1 and not t.trip_category
+            t for t in transactions if t.l3 == 'OTHER'
         ]
 
     return render_template(

@@ -1,7 +1,7 @@
 from finances.database.models import DbTransaction, DbInsuranceClaim
 
 
-DIR_BASE = '/Users/julie/Code/github.com/finances/finances/history'
+DIR_BASE = '/Users/julie/dropbox/finances/history/'
 CSV_INGEST_INFO = {
     'INSURANCE_CLAIMS': {
         'DB_MODEL': DbInsuranceClaim,

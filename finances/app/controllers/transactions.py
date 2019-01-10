@@ -7,6 +7,16 @@ from finances.database import db_session
 from finances.domain.constructors import db_transaction_to_domain_transaction, db_trip_to_domain_trip
 
 
+FILTER_DIR = '/Users/julie/Code/github.com/finances/finances/app/classify/filters/'
+L3_TO_FILE = {
+    'ALCOHOL': 'alcohol.txt',
+    'COFFEE': 'coffee.txt',
+    'ENTERTAINMENT': 'entertainment.txt',
+    'FOOD': 'food.txt',
+    'SHOPPING': 'shopping.txt',
+}
+
+
 def all_transactions(l1: str=None, l2: str=None, l3: str=None, month: int=None, year: int=2018):
     transactions = {}
     with db_session() as session:

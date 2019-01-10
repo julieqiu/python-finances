@@ -49,7 +49,7 @@ CLASSIFICATION_TO_PHRASES = {
         },
 
         'Transportation': {
-            'lyft': ['Lyft', 'Uber'],
+            'lyft': ['Lyft', 'Uber', 'Via'],
             'mta': ['MTA'],
             'taxi': ['NYCTAXI', 'TAXI SVC'],
         },
@@ -80,6 +80,9 @@ CLASSIFICATION_TO_PHRASES = {
         'Health': {
             'reimbursements': ['REMOTE ONLINE DEPOSIT'],
         },
+        'Invesment': {
+            'investment': ['Vanguard', 'Betterment'],
+        }
 
     },
 
