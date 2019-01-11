@@ -190,3 +190,60 @@ def trip_id_and_names():
 def transaction_classifications():
     with db_session() as session:
         return [(tc.id, tc.l1, tc.l2, tc.l3) for tc in session.query(DbTransactionClassification).all()]
+
+
+def transactions(request):
+    if request.method == 'POST':
+        for key, value in request.form.items():
+            if value:
+                db_table = key.split('-')[0]
+                db_col = key.split('-')[1]
+                db_val = key.split('-')[2]
+                if len(key.split('-')) == 4:
+                    # for description_edited
+                    db_col2 = key.split('-')[3]
+                    db_val2 = value
+                elif len(value.split('-')) == 2:
+                    db_col2 = value.split('-')[0]
+                    db_val2 = value.split('-')[1]
+
+                # TODO: send description over the wire and write to disk
+                update_table_values(
+                    db_table,
+                    update_values=(db_col2, db_val2),
+                    where_values=(db_col, db_val),
+                )
+
+    if 'trips' in request.args.keys():
+        trip_id = request.args.get('id')
+        if trip_id and trip_id.isnumeric():
+            trip_id = int(trip_id)
+
+        category = request.args.get('category')
+        transactions = all_trip_transactions(trip_id, category)
+
+    elif 'month' in request.args.keys():
+        month = int(request.args.get('month'))
+        year = int(request.args.get('year', 2018))
+        transactions = all_transactions(month=month, year=year)
+
+    elif 'amount' in request.args.keys():
+        term = request.args.get('term')
+        transactions = transactions_for_amount(amount)
+
+    elif 'term' in request.args.keys():
+        term = request.args.get('term')
+        transactions = transactions_for_term(term)
+
+    else:
+        l1 = request.args.get('l1')
+        l2 = request.args.get('l2')
+        l3 = request.args.get('l3')
+        transactions = all_transactions(l1=l1, l2=l2, l3=l3)
+
+    if 'classify' in request.args.keys():
+        transactions = [
+            t for t in transactions if t.l3 == 'OTHER'
+        ]
+
+    return transactions

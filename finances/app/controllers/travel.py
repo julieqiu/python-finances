@@ -6,7 +6,24 @@ from finances.domain.constructors import db_transaction_to_domain_transaction, d
 from finances.domain.models import TripReport, Transaction
 
 
-def travel_reports(trip_id=None):
+def travel_reports(request):
+    trs = []
+    if 'funemployment2018' in request.query_string.decode():
+        for trip_id in sorted([5, 6, 7, 8, 9, 10, 11], reverse=True):
+            trs = trs + _travel_reports(trip_id=trip_id)
+    elif 'conferences2018' in request.query_string.decode():
+        for trip_id in sorted([1, 2, 4], reverse=True):
+            trs = trs + _travel_reports(trip_id=trip_id)
+    elif request.args.get('id'):
+        trip_id = request.args.get('id')
+        trs = _travel_reports(trip_id=trip_id)
+    else:
+        trs = _travel_reports()
+
+    return trs
+
+
+def _travel_reports(trip_id=None):
     trips = {}
 
     transactions = []
